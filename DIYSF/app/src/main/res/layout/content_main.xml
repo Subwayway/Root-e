@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:weightSum="10">
+
+    <TextView
+        android:id="@+id/dateNow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:layout_marginTop="30dp"
+        android:layout_weight="0.3"
+        android:textSize="20dp"
+        tools:text="@tools:sample/date/mmddyy" />
+
+    <GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        tools:ignore="missingPrefix"
+        android:id="@+id/gridLayout"
+        android:orientation = "horizontal"
+        android:columnCount="5"
+        android:rowCount="2"
+        android:layout_marginTop="25dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_gravity="center">
+        <Button
+            android:id="@+id/OnOff"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ON/OFF" />
+        <Button
+            android:id="@+id/btnConnect"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="connect"
+            android:layout_rowSpan = "2"
+            android:layout_gravity="fill"/>
+        <TextView
+            android:id="@+id/tvStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:layout_row="1"
+            android:layout_column="0"/>
+        <Button
+            android:id="@+id/btnSend"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="전송"
+            android:layout_row="0"
+            android:layout_column="2" />
+        <EditText
+            android:id="@+id/etSend"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="BTData"
+            android:layout_row="1"
+            android:layout_column="2" />
+
+    </GridLayout>
+
+    <fragment
+        android:id="@+id/FirstFragment"
+        android:name="androidx.navigation.fragment.NavHostFragment"
+        android:layout_width="match_parent"
+        android:layout_height="703dp"
+        app:defaultNavHost="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:navGraph="@navigation/nav_graph" />
+
+</LinearLayout>

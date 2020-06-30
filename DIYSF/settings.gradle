@@ -1,0 +1,2 @@
+rootProject.name='DIYSF'
+include ':app'

@@ -1,0 +1,130 @@
+{
+  "project_info": {
+    "project_number": "660783665157",
+    "firebase_url": "https://diy-smartfarm.firebaseio.com",
+    "project_id": "diy-smartfarm",
+    "storage_bucket": "diy-smartfarm.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:660783665157:android:e808f75cf58c6701d3cc6c",
+        "android_client_info": {
+          "package_name": "com.example.DIYSF"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "660783665157-p9ub3e2cu21m6bg5rr4oi0e6gac2s7sa.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.DIYSF",
+            "certificate_hash": "c3e6fc7b23c190fbecf188b4d4f1778efa6c817a"
+          }
+        },
+        {
+          "client_id": "660783665157-hp49qoeti333g3eoiee7vgjloh7n4167.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.DIYSF",
+            "certificate_hash": "d99639b514338a130bcdb06ec0a3318344fd23b5"
+          }
+        },
+        {
+          "client_id": "660783665157-aemkdt32u7n9alajdeakhvqqt288mrcj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBIloP0qjb98sUeAXck4iSHyld3u_EuxjM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "660783665157-aemkdt32u7n9alajdeakhvqqt288mrcj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:660783665157:android:335bc70d9c684eebd3cc6c",
+        "android_client_info": {
+          "package_name": "com.example.fbstorage"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "660783665157-o9h3m4bcsvola0p49ltllut5brcalipp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.fbstorage",
+            "certificate_hash": "c3e6fc7b23c190fbecf188b4d4f1778efa6c817a"
+          }
+        },
+        {
+          "client_id": "660783665157-aemkdt32u7n9alajdeakhvqqt288mrcj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBIloP0qjb98sUeAXck4iSHyld3u_EuxjM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "660783665157-aemkdt32u7n9alajdeakhvqqt288mrcj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:660783665157:android:6601ba588ab3b9d7d3cc6c",
+        "android_client_info": {
+          "package_name": "com.example.firebase"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "660783665157-q4e5goagft6f9fuvq0mmhmk28ulgntg4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.firebase",
+            "certificate_hash": "d99639b514338a130bcdb06ec0a3318344fd23b5"
+          }
+        },
+        {
+          "client_id": "660783665157-aemkdt32u7n9alajdeakhvqqt288mrcj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBIloP0qjb98sUeAXck4iSHyld3u_EuxjM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "660783665157-aemkdt32u7n9alajdeakhvqqt288mrcj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
