@@ -1,0 +1,37 @@
+{
+  "menu":[
+    "Select Plant",
+    "Custom Plant",
+    "Setting"
+  ],
+  "Select Plant":[
+    "Lettuce",
+    "Tomato",
+    "Herb"
+  ],
+  "Custom Plant":[
+    "Bright",
+    "Water",
+    "Camera"
+  ],
+  "Setting":[
+    "Bluetooth",
+    "Wi-Fi",
+    "Camera"
+  ],
+  "Lettuce":{
+    "Bright":3,
+    "Water":3,
+    "Camera":2
+  },
+  "Tomato":{
+    "Bright":3,
+    "Water":3,
+    "Camera":2
+  },
+  "Herb":{
+    "Bright":3,
+    "Water":3,
+    "Camera":2
+  }
+}
