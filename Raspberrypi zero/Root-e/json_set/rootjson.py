@@ -44,9 +44,18 @@ def save_selct_env(i):
 
 def save_custom_env(i,j,k):
     setting_write_json("setting","plant","custom")
-    setting_write_json("setting","Bright",i)
-    setting_write_json("setting","Water",j)
-    setting_write_json("setting","Camera",k)
+    if j=="Bright":
+        setting_write_json("setting","Bright",k)
+    elif j=="Water":
+        setting_write_json("setting","Water",k)
+    elif j=="Camera":
+        setting_write_json("setting","Camera",k)
+
+def json_update(i,j,k):
+    if i=="Select Plant":
+        save_selct_env(j)
+    elif i=="Custom Plant":
+        save_custom_env(i,j,k)
 # test code
 # print(menu_main_json(1))
 # print(menu_select_json(1,1))

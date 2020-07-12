@@ -56,11 +56,11 @@ def menu(i, j):
     ac_print(i, second_line)
 
 def new_value(i,j):
-    second_line = "set "+j
+    second_line = "set "+str(j)
     ac_print(i,second_line)
 
 def change_value(i,j,k):
-    second_line = "now:"+j+"->"+k
+    second_line = "now:"+str(j)+"->"+str(k)
     ac_print(i,second_line)
 
 def yesno(i):
