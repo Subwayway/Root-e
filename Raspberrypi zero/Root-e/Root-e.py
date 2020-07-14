@@ -1,13 +1,16 @@
 from lcd import rootlcd
 from gpio import rootgpio
 from json_set import rootjson
+from bt import bt_slave
 
 from gpiozero import Button
 import time
 import os.path
+import threading
 
 menu_state={'main':'none', 'select':'none', 'value':'none'}
-
+menu_state_str={'main':'none', 'select':'none', 'value':'none'}
+connect_state={'Bluetooth':'none','WiFi':'none'}
 
 #first init main logo display
 rootlcd.lcd_init()
@@ -22,9 +25,13 @@ else:
     menu_state['main']=0
     rootlcd.menu("MENU",rootjson.menu_main_json(menu_state['main'])) #go to plant setting loop
 
+def screen_change():
+    #menu_state list change to json string
+    menu_state_str['main'],menu_state_str['select'],menu_state_str['value']=rootjson.menu_json(menu_state['main'],menu_state['select'],menu_state['value'])
+    rootlcd.display(menu_state_str['main'],menu_state_str['select'],menu_state_str['value'])
 
 def bt_next():
-    global menu_state
+    # main, select, value state change
     if (menu_state['value']!='none'):
         menu_state['value']=menu_state['value']+1
     elif (menu_state['select']!='none')&(menu_state['select']!=2):
@@ -32,12 +39,9 @@ def bt_next():
     elif(menu_state['select']=='none')&(menu_state['main']!=2):
         menu_state['main']=menu_state['main']+1
 
-    #menu_state list change to json string
-    main_j, select_j, value_j=rootjson.menu_json(menu_state['main'],menu_state['select'],menu_state['value'])
-    rootlcd.display(main_j, select_j, value_j)
+    screen_change()
 
 def bt_back():
-    global menu_state
     if (menu_state['value']!='none'):
         menu_state['value']=menu_state['value']-1
     elif (menu_state['select']!='none')&(menu_state['select']!=0):
@@ -45,42 +49,51 @@ def bt_back():
     elif(menu_state['select']=='none')&(menu_state['main']!=0):
         menu_state['main']=menu_state['main']-1
 
-    #menu_state list change to json string
-    main_j, select_j, value_j=rootjson.menu_json(menu_state['main'],menu_state['select'],menu_state['value'])
-    rootlcd.display(main_j, select_j, value_j)
+    screen_change()
 
 def bt_select():
-    global menu_state
+    # select menu->value menu
     if (menu_state['select']!='none')&(menu_state['value']=='none'):
         menu_state['value']=0
+    # value menu->change json, BT, wifi set
     elif menu_state['value']!='none':
         # json update
-        main_j, select_j, value_j=rootjson.menu_json(menu_state['main'],menu_state['select'],menu_state['value'])
-        rootjson.json_update(main_j, select_j, value_j)
+        menu_state_str['main'],menu_state_str['select'],menu_state_str['value']=rootjson.menu_json(menu_state['main'],menu_state['select'],menu_state['value'])
+        rootjson.json_update(menu_state_str['main'],menu_state_str['select'],menu_state_str['value'])
+
         bt_cancel()
+    # main menu->select menu
     else:
         menu_state['select']=0
 
-    #menu_state list change to json string
-    main_j, select_j, value_j=rootjson.menu_json(menu_state['main'],menu_state['select'],menu_state['value'])
-    rootlcd.display(main_j, select_j, value_j)
+    screen_change()
 
 def bt_cancel():
-    global menu_state
     menu_state['select']='none'
     menu_state['value']='none'
 
-    #menu_state list change to json string
-    main_j, select_j, value_j=rootjson.menu_json(menu_state['main'],menu_state['select'],menu_state['value'])
-    rootlcd.display(main_j, select_j, value_j)
+    screen_change()
 
-# #button interrupt event
+# button interrupt event
 
 rootgpio.button1.when_pressed = bt_back
 rootgpio.button2.when_pressed = bt_next
 rootgpio.button3.when_pressed = bt_select
 rootgpio.button4.when_pressed = bt_cancel
 
+# Bluetooth connection, receive thread
+def BT_thread():
+    while True:
+        if connect_state['Bluetooth']!='connected':
+            bt_slave.setBT()
+            connect_state['Bluetooth']='connected'
+        else :
+            connect_state['Bluetooth']=bt_slave.receiveMsg()
+
+t = threading.Thread(target=BT_thread)
+t.start()
+
+# main
 try:
        while True:
            time.sleep(0.1)

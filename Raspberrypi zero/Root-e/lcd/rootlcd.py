@@ -48,8 +48,8 @@ def display(i,j,k):
         yesno(j)
     elif (i=='Custom Plant')&(k!='none'):
         new_value(j,k)
-    elif (i=='Setting')&(k!='none'):
-        yesno(j)
+    elif (i=='Setting')&(j=='Bluetooth')&(k!='none'):
+        pairing(j)
 
 def menu(i, j):
     second_line = "<"+j+">"
@@ -65,6 +65,9 @@ def change_value(i,j,k):
 
 def yesno(i):
     ac_print(i,"set?")
+
+def pairing(i):
+    ac_print(i,"pairing?")
 
 def setok():
     ac_print("Set OK!!!")
