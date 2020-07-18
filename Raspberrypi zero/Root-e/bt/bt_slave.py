@@ -3,6 +3,7 @@ from bluetooth import *
 global server_sock
 global client_sock
 global client_info
+global data
 
 def setBT():
     global server_sock
@@ -34,6 +35,7 @@ def receiveMsg():
     global server_sock
     global client_sock
     global client_info
+    global data
     try:
         # send data from receive
         data = client_sock.recv(1024)
@@ -41,7 +43,7 @@ def receiveMsg():
             print("received [%s]" % data)
             print("send [%s]" % data[::-1])
             client_sock.send(data[::-1])
-            return 'connected'
+            return data
 
     except IOError:
         print("disconnected")

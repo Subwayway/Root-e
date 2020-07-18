@@ -6,6 +6,7 @@ from bt import bt_slave
 from gpiozero import Button
 import time
 import os.path
+import os
 import threading
 
 menu_state={'main':'none', 'select':'none', 'value':'none'}
@@ -84,11 +85,19 @@ rootgpio.button4.when_pressed = bt_cancel
 # Bluetooth connection, receive thread
 def BT_thread():
     while True:
-        if connect_state['Bluetooth']!='connected':
+        if (connect_state['Bluetooth']=='none')|(connect_state['Bluetooth']=='disconnected'):
             bt_slave.setBT()
             connect_state['Bluetooth']='connected'
         else :
-            connect_state['Bluetooth']=bt_slave.receiveMsg()
+            connect_state['Bluetooth']=bt_slave.receiveMsg().decode()
+            print(connect_state['Bluetooth'])
+            if connect_state['Bluetooth']!='disconnected':
+                buf_BTmsg=connect_state['Bluetooth'].split(' ')
+                print(buf_BTmsg)
+                if buf_BTmsg[0]=='WF':
+                    sh_join='./wifi/auto_wifi.sh '+buf_BTmsg[1]+' '+buf_BTmsg[2]
+                    os.system(sh_join)
+
 
 t = threading.Thread(target=BT_thread)
 t.start()
