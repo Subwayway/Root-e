@@ -12,63 +12,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="right"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="20dp"
         android:layout_weight="0.3"
         android:textSize="20dp"
         tools:text="@tools:sample/date/mmddyy" />
-
-    <GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        tools:ignore="missingPrefix"
-        android:id="@+id/gridLayout"
-        android:orientation = "horizontal"
-        android:columnCount="5"
-        android:rowCount="2"
-        android:layout_marginTop="25dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-
-        android:layout_gravity="center">
-        <Button
-            android:id="@+id/OnOff"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="ON/OFF" />
-        <Button
-            android:id="@+id/btnConnect"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="connect"
-            android:layout_rowSpan = "2"
-            android:layout_gravity="fill"/>
-        <TextView
-            android:id="@+id/tvStatus"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text=""
-            android:layout_row="1"
-            android:layout_column="0"/>
-        <Button
-            android:id="@+id/btnSend"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="전송"
-            android:layout_row="0"
-            android:layout_column="2" />
-        <EditText
-            android:id="@+id/etSend"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="BTData"
-            android:layout_row="1"
-            android:layout_column="2" />
-
-    </GridLayout>
 
     <fragment
         android:id="@+id/FirstFragment"
         android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
-        android:layout_height="703dp"
+        android:layout_height="match_parent"
         app:defaultNavHost="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"

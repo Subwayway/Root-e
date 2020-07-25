@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.util.Log;
@@ -14,7 +15,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.UUID;
 
-public class bluetooth {
+public class bluetooth extends Activity {
     private final static int REQUEST_CONNECT_DEVICE = 1;
     private final static int REQUEST_ENABLE_BT = 2;
     public static final int STATE_NONE = 1; // 아무것도 하지 않을 때
@@ -24,7 +25,7 @@ public class bluetooth {
     public static final int STATE_FAIL = 7; // 연결이 실패 했을 때
     private static final String TAG = "bluetooth";
     public final static UUID MY_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
-
+    public static Context mbluetooth;
     public BluetoothAdapter btAdapter;
     private Activity mActivity;
     private Handler mHandler;
@@ -37,6 +38,7 @@ public class bluetooth {
         mActivity = activity;
         mHandler = handler;
         btAdapter = BluetoothAdapter.getDefaultAdapter();
+        mbluetooth = this;
     }
 
 
@@ -57,17 +59,14 @@ public class bluetooth {
 
         if (btAdapter.isEnabled()) {
             //기기의 블루투스 상태가 On일 경우..
-
             Toast.makeText(mActivity.getApplicationContext(), "블루투스가 비활성화 되었습니다.", Toast.LENGTH_SHORT).show();
             btAdapter.disable();
-            MainActivity.mTvBluetoothStatus.setText("비활성화");
+
         } else {
             //기기의 블루투스 상태가 off일 경우
-
             Toast.makeText(mActivity.getApplicationContext(), "블루투스가 활성화 되었습니다.", Toast.LENGTH_SHORT).show();
             Intent i = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             mActivity.startActivityForResult(i, REQUEST_ENABLE_BT);
-            MainActivity.mTvBluetoothStatus.setText("활성화");
         }
     }
 
@@ -83,7 +82,7 @@ public class bluetooth {
         mState = state;
 
         // 핸들러를 통해 상태를 메인에 넘겨준다.
-        mHandler.obtainMessage(MainActivity.MESSAGE_STATE_CHANGE, state, -1).sendToTarget();
+        mHandler.obtainMessage(SettingActivity.MESSAGE_STATE_CHANGE, state, -1).sendToTarget();
     }
 
     /* getState() : Bluetooth 상태를 get한다. */

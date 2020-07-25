@@ -27,8 +27,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name="com.example.DIYSF.DeviceListActivity"
+        <activity android:name=".SettingActivity"></activity>
+        <activity android:name=".DeviceListActivity"
             android:theme="@android:style/Theme.DeviceDefault.Dialog">
         </activity>
     </application>

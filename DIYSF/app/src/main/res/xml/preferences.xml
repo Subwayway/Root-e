@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <Preference
+        android:defaultValue="true"
+        android:title="블루투스 On/Off"
+        android:key="OnOff" >
+    </Preference>
+
+
+    <Preference
+        android:title="전송"
+        android:key="BtnSend">
+    </Preference>
+
+    <EditTextPreference
+        android:title="PassWord 입력"
+        android:summary=""
+        android:defaultValue="0000"
+        android:key="Password"
+        android:maxLines="2"
+        android:selectAllOnFocus="true"
+        android:singleLine="true" />
+
+</PreferenceScreen>
