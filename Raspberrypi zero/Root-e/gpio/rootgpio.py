@@ -6,7 +6,7 @@ button2 = Button(16)
 button3 = Button(20)
 button4 = Button(21)
 
-led_pwm = PWMLED(19)
+
 led = LED(26)
 motor = LED(13)
 
@@ -22,6 +22,8 @@ def motor_on():
 def motor_off():
     motor.off()
 
-# 0~1 (0~100%)
-def led_pwmset(i):
-    led_pwm.value=i
+def gpio_off():
+    led.off()
+    motor.off()
+    led.close()
+    motor.close()

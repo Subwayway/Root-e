@@ -3,8 +3,10 @@ from gpio import rootgpio
 from json_set import rootjson
 from bt import bt_slave
 from firebase import rootfire
+from adc import rootsensor
+from dht import dht_py
 
-from gpiozero import Button
+from gpiozero import Button, PWMLED
 import time
 import os.path
 import os
@@ -13,7 +15,7 @@ import threading
 menu_state={'main':'none', 'select':'none', 'value':'none'}
 menu_state_str={'main':'none', 'select':'none', 'value':'none'}
 connect_state={'Bluetooth':'none','WiFi':'none'}
-setting_state={'setting':'none'}
+setting_state={'setting':'none', 'led':'none', 'water_refill':'none', 'DHT_sensor':'none'}
 
 #first init main logo display
 rootlcd.lcd_init()
@@ -24,10 +26,7 @@ def screen_change():
     menu_state_str['main'],menu_state_str['select'],menu_state_str['value']=rootjson.menu_json(menu_state['main'],menu_state['select'],menu_state['value'])
     rootlcd.display(menu_state_str['main'],menu_state_str['select'],menu_state_str['value'])
 
-def time_now(value):
-    now = time.localtime()
-
-    return time.strftime(value, now)
+now = time.localtime()
 
 #check setting json file
 if rootjson.set_check_json('setting', 'start'):
@@ -72,7 +71,7 @@ def bt_select():
     elif menu_state['value']!='none':
         # json update
         menu_state_str['main'],menu_state_str['select'],menu_state_str['value']=rootjson.menu_json(menu_state['main'],menu_state['select'],menu_state['value'])
-        rootjson.json_setupdate(menu_state_str['main'],menu_state_str['select'],menu_state_str['value'],time_now('%Y-%m-%d %H:%M:%S'))
+        rootjson.json_setupdate(menu_state_str['main'],menu_state_str['select'],menu_state_str['value'],time.strftime('%Y-%m-%d %H:%M:%S', now))
 
         bt_cancel()
     # main menu->select menu
@@ -120,23 +119,52 @@ def camera_upload():
     rootfire.fire_upload('./img_sample/movie.gif')
 
 
+def roote_daycheck():
+    split_buf=rootjson.setting_read_json('setting', 'start')
+    if time.strftime('%Y-%m-%d')!=split_buf.split(' ')[0]:
+        if time.strftime('%Y-%m-%d %H:%M:%S', now)==split_buf.split(' ')[1]:
+           buf=rootjson.setting_read_json("setting","day")+1
+           rootjson.setting_write_json("setting","day",buf)
+           setting_state['water_refill']=False
+
+def roote_gpiosys():
+    if setting_state['setting']==True:
+       led_pwm.value=rootjson.setting_read_json('setting', 'Bright')
+       if (now.tm_hour>=rootjson.setting_read_json('setting', 'Ledon'))&(now.tm_hour<rootjson.setting_read_json('setting', 'Ledoff')):
+           rootgpio.led_on()
+       elif (now.tm_hour>=rootjson.setting_read_json('setting', 'Ledoff'))|(now.tm_hour<rootjson.setting_read_json('setting', 'Ledon')):
+           rootgpio.led_off()
+           
+       if (rootjson.setting_read_json('setting','day')==rootjson.setting_read_json('setting', 'Water'))&(setting_state['water_refill']!=True):
+           while rootsensor.sensor_read(0)!=720:
+               rootgpio.motor_on()
+           rootgpio.motor_off()
+           setting_state['water_refill']=True
+           
+       if now.tm_min==rootjson.setting_read_json('setting', 'Env'):
+           if setting_state['DHT_sensor']==False:
+               print(dht_py.dht22_read())
+               setting_state['DHT_sensor']=True
+               #upload env data to firebase code
+       else:
+           setting_state['DHT_sensor']=False
+           
+       # if now.tm_hour==(24//rootjson.setting_read_json('setting', 'Camera')):
+           # camera snapshot
+           # camera upload
+    
+    roote_daycheck()
+
+led_pwm=PWMLED(19)
+
+
 # main
 try:
        while True:
            time.sleep(0.1)
-           if setting_state['setting']==True:
-               # pwm 문제가 생겨 안되는듯 임포트 함수말고 메인파일에서 해볼것
-               rootgpio.led_pwmset(rootjson.setting_read_json('setting', 'Bright'))
-               if time_now('%H')==str(rootjson.setting_read_json('setting', 'Ledon')):
-                   rootgpio.led_on()
-               elif time_now('%H')==str(rootjson.setting_read_json('setting', 'Ledoff')):
-                   rootgpio.led_off()
-               elif time_now('%H')==str(rootjson.setting_read_json('setting', 'Water')):
-                   rootgpio.motor_on()
-               print(str(rootjson.setting_read_json('setting', 'Ledon')))
-                   #until water level complite
-               # elif time_now('%M')==str(rootjson.setting_read_json('setting', 'Env')):
-           # elif time_now('%H')==str(24//rootjson.setting_read_json('setting', 'Camera')):
+           
+           roote_gpiosys()
 
 except KeyboardInterrupt:
-       GPIO.cleanup()
+       print("Main thread shutdown")
+       rootgpio.gpio_off()

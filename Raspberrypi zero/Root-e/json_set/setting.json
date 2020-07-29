@@ -5,6 +5,7 @@
 	},
 	"setting": {
 		"start": "none",
+		"day": 1,
 		"plant": "Tomato",
 		"Bright": 1,
 		"Ledon": 1,
