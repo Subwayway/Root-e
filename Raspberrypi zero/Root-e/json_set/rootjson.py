@@ -1,8 +1,8 @@
 import json
 
-with open('json_set/menu.json') as json_menu_file:
+with open('/home/pi/smartfarm/Root-e/json_set/menu.json') as json_menu_file:
     json_menu = json.load(json_menu_file)
-with open('json_set/setting.json') as json_setting_file:
+with open('/home/pi/smartfarm/Root-e/json_set/setting.json') as json_setting_file:
     json_setting = json.load(json_setting_file)
 
 #load main menu form menu.json
@@ -50,11 +50,17 @@ def menu_json(i,j,k):
 def setting_write_json(i,j,k):
     json_setting[i][j]=k
 
-    with open('json_set/setting.json', 'w', encoding='utf-8') as setting_json:
+    with open('/home/pi/smartfarm/Root-e/json_set/setting.json', 'w', encoding='utf-8') as setting_json:
         json.dump(json_setting, setting_json, indent="\t")
 
 def setting_read_json(i,j):
     return json_setting[i][j]
+    
+def setting_ret_json():
+    with open('/home/pi/smartfarm/Root-e/json_set/setting.json', 'r') as f:
+        json_data = json.load(f)
+    
+    return json_data
 
 def save_selct_env(i):
     setting_write_json("setting","plant",i)

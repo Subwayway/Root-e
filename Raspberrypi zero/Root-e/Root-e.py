@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 from lcd import rootlcd
 from gpio import rootgpio
 from json_set import rootjson
@@ -5,6 +7,7 @@ from bt import bt_slave
 from firebase import rootfire
 from adc import rootsensor
 from dht import dht_py
+from camera import rootcam
 
 from gpiozero import Button, PWMLED
 import time
@@ -15,7 +18,7 @@ import threading
 menu_state={'main':'none', 'select':'none', 'value':'none'}
 menu_state_str={'main':'none', 'select':'none', 'value':'none'}
 connect_state={'Bluetooth':'none','WiFi':'none'}
-setting_state={'setting':'none', 'led':'none', 'water_refill':'none', 'DHT_sensor':'none'}
+setting_state={'setting':'none', 'led':'none', 'water_refill':'none', 'DHT_sensor':'none', 'camera':'none'}
 
 #first init main logo display
 rootlcd.lcd_init()
@@ -95,28 +98,30 @@ rootgpio.button4.when_pressed = bt_cancel
 
 # Bluetooth connection, receive thread
 def BT_thread():
-    while True:
-        if (connect_state['Bluetooth']=='none')|(connect_state['Bluetooth']=='disconnected'):
-            bt_slave.setBT()
-            connect_state['Bluetooth']='connected'
-        else :
-            connect_state['Bluetooth']=bt_slave.receiveMsg().decode()
-            print(connect_state['Bluetooth'])
-            if connect_state['Bluetooth']!='disconnected':
-                buf_BTmsg=connect_state['Bluetooth'].split(' ')
-                print(buf_BTmsg)
-                if buf_BTmsg[0]=='WF':
-                    sh_join='./wifi/auto_wifi.sh '+buf_BTmsg[1]+' '+buf_BTmsg[2]
-                    os.system(sh_join)
-                # elif buf_BTmsg[0]='CP':
+    try:
+        while True:
+            if (connect_state['Bluetooth']=='none')|(connect_state['Bluetooth']=='disconnected'):
+                bt_slave.setBT()
+                connect_state['Bluetooth']='connected'
+            else :
+                connect_state['Bluetooth']=bt_slave.receiveMsg().decode()
+                print(connect_state['Bluetooth'])
+                if connect_state['Bluetooth']!='disconnected':
+                    buf_BTmsg=connect_state['Bluetooth'].split(' ')
+                    print(buf_BTmsg)
+                    if buf_BTmsg[0]=='WF':
+                        sh_join='./wifi/auto_wifi.sh '+buf_BTmsg[1]+' '+buf_BTmsg[2]
+                        os.system(sh_join)
+                    # elif buf_BTmsg[0]='CP':
+    except:
+        pass
 
 
 t = threading.Thread(target=BT_thread)
 t.start()
 
 def camera_upload():
-    os.system('convert -delay 10 ./img_sample/*.jpg ./img_sample/movie.gif')
-    rootfire.fire_upload('./img_sample/movie.gif')
+    rootfire.fire_upload('/home/pi/smartfarm/Root-e/img_sample/movie.gif', rootjson.setting_read_json("info","id"), rootjson.setting_ret_json())
 
 
 def roote_daycheck():
@@ -142,17 +147,20 @@ def roote_gpiosys():
            setting_state['water_refill']=True
            
        if now.tm_min==rootjson.setting_read_json('setting', 'Env'):
-           if setting_state['DHT_sensor']==False:
+           if (setting_state['DHT_sensor']==False)|(setting_state['DHT_sensor']=='none'):
                print(dht_py.dht22_read())
                setting_state['DHT_sensor']=True
                #upload env data to firebase code
        else:
            setting_state['DHT_sensor']=False
            
-       # if now.tm_hour==(24//rootjson.setting_read_json('setting', 'Camera')):
-           # camera snapshot
-           # camera upload
-    
+       if (now.tm_hour//rootjson.setting_read_json('setting', 'Camera'))==0:
+           if (setting_state['camera']==False)|(setting_state['camera']=='none'):
+               rootcam.capture()
+               rootcam.create_gif()
+               setting_state['camera']=True
+       else:
+           setting_state['camera']==False
     roote_daycheck()
 
 led_pwm=PWMLED(19)
