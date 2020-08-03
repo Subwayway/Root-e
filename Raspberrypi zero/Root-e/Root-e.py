@@ -75,7 +75,7 @@ def bt_select():
         # json update
         menu_state_str['main'],menu_state_str['select'],menu_state_str['value']=rootjson.menu_json(menu_state['main'],menu_state['select'],menu_state['value'])
         rootjson.json_setupdate(menu_state_str['main'],menu_state_str['select'],menu_state_str['value'],time.strftime('%Y-%m-%d %H:%M:%S', now))
-
+        rootfire.fire_set_update(rootjson.setting_ret_json(), rootjson.setting_read_json("info","id"))
         bt_cancel()
     # main menu->select menu
     else:
@@ -120,9 +120,6 @@ def BT_thread():
 t = threading.Thread(target=BT_thread)
 t.start()
 
-def camera_upload():
-    rootfire.fire_upload('/home/pi/smartfarm/Root-e/img_sample/movie.gif', rootjson.setting_read_json("info","id"), rootjson.setting_ret_json())
-
 
 def roote_daycheck():
     split_buf=rootjson.setting_read_json('setting', 'start')
@@ -148,9 +145,10 @@ def roote_gpiosys():
            
        if now.tm_min==rootjson.setting_read_json('setting', 'Env'):
            if (setting_state['DHT_sensor']==False)|(setting_state['DHT_sensor']=='none'):
-               print(dht_py.dht22_read())
                setting_state['DHT_sensor']=True
                #upload env data to firebase code
+               i,j=dht_py.dht22_read()
+               rootfire.fire_env_update(i,j,rootjson.setting_read_json("info","id"))
        else:
            setting_state['DHT_sensor']=False
            
@@ -158,6 +156,7 @@ def roote_gpiosys():
            if (setting_state['camera']==False)|(setting_state['camera']=='none'):
                rootcam.capture()
                rootcam.create_gif()
+               rootfire.fire_gif_update('/home/pi/smartfarm/Root-e/img_sample/movie.gif', rootjson.setting_read_json("info","id"))
                setting_state['camera']=True
        else:
            setting_state['camera']==False
