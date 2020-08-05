@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/python3
 
 from lcd import rootlcd
 from gpio import rootgpio
@@ -136,14 +136,14 @@ def roote_gpiosys():
            rootgpio.led_on()
        elif (now.tm_hour>=rootjson.setting_read_json('setting', 'Ledoff'))|(now.tm_hour<rootjson.setting_read_json('setting', 'Ledon')):
            rootgpio.led_off()
-           
+
        if (rootjson.setting_read_json('setting','day')==rootjson.setting_read_json('setting', 'Water'))&(setting_state['water_refill']!=True):
-           while rootsensor.sensor_read(0)!=720:
+           while rootsensor.sensor_read(7)!=720:
                rootgpio.motor_on()
            rootgpio.motor_off()
            setting_state['water_refill']=True
-           
-       if now.tm_min==rootjson.setting_read_json('setting', 'Env'):
+
+       if (now.tm_min&rootjson.setting_read_json('setting', 'Env'))==0:
            if (setting_state['DHT_sensor']==False)|(setting_state['DHT_sensor']=='none'):
                setting_state['DHT_sensor']=True
                #upload env data to firebase code
@@ -151,8 +151,8 @@ def roote_gpiosys():
                rootfire.fire_env_update(i,j,rootjson.setting_read_json("info","id"))
        else:
            setting_state['DHT_sensor']=False
-           
-       if (now.tm_hour//rootjson.setting_read_json('setting', 'Camera'))==0:
+
+       if (now.tm_hour&rootjson.setting_read_json('setting', 'Camera'))==0:
            if (setting_state['camera']==False)|(setting_state['camera']=='none'):
                rootcam.capture()
                rootcam.create_gif()
@@ -169,7 +169,7 @@ led_pwm=PWMLED(19)
 try:
        while True:
            time.sleep(0.1)
-           
+
            roote_gpiosys()
 
 except KeyboardInterrupt:

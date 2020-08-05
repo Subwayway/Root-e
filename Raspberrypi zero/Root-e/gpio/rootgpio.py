@@ -1,11 +1,14 @@
 from gpiozero import Button, PWMLED, LED
 import time
 
-button1 = Button(12)
-button2 = Button(16)
-button3 = Button(20)
-button4 = Button(21)
-
+# back
+button1 = Button(21)
+# next
+button2 = Button(20)
+# select
+button3 = Button(16)
+# cancel
+button4 = Button(12)
 
 led = LED(26)
 motor = LED(13)

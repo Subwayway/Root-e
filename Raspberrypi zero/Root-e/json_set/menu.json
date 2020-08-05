@@ -24,10 +24,10 @@
   ],
   "Lettuce":{
     "Bright":0.3,
-    "Ledoff":18,
+    "Ledoff":20,
     "Ledon":6,
     "Water":14,
-    "Env":30,
+    "Env":10,
     "Camera":2
   },
   "Tomato":{

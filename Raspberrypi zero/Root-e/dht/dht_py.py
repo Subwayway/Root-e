@@ -37,7 +37,7 @@ def dht22_read():
     # If this happens try again!
     if humidity is not None and temperature is not None:
         print('Temp={0:0.1f}*  Humidity={1:0.1f}%'.format(temperature, humidity))
-        return format(temperature,"10.2f"), format(humidity,"10.2f")
+        return format(temperature,"2.2f"), format(humidity,"2.2f")
     else:
         print('Failed to get reading. Try again!')
         sys.exit(1)
