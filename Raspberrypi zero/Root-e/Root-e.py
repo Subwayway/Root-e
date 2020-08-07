@@ -110,8 +110,10 @@ def BT_thread():
                     buf_BTmsg=connect_state['Bluetooth'].split(' ')
                     print(buf_BTmsg)
                     if buf_BTmsg[0]=='WF':
-                        sh_join='./wifi/auto_wifi.sh '+buf_BTmsg[1]+' '+buf_BTmsg[2]
+                        sh_join='/home/pi/smartfarm/Root-e/wifi/auto_wifi.sh '+buf_BTmsg[1]+' '+buf_BTmsg[2]
                         os.system(sh_join)
+                    elif buf_BTmsg[0]=='SD':
+                        os.system('sudo shutdown -h now')
                     # elif buf_BTmsg[0]='CP':
     except:
         pass
@@ -143,7 +145,7 @@ def roote_gpiosys():
            rootgpio.motor_off()
            setting_state['water_refill']=True
 
-       if (now.tm_min&rootjson.setting_read_json('setting', 'Env'))==0:
+       if (now.tm_min%rootjson.setting_read_json('setting', 'Env'))==0:
            if (setting_state['DHT_sensor']==False)|(setting_state['DHT_sensor']=='none'):
                setting_state['DHT_sensor']=True
                #upload env data to firebase code
@@ -152,7 +154,7 @@ def roote_gpiosys():
        else:
            setting_state['DHT_sensor']=False
 
-       if (now.tm_hour&rootjson.setting_read_json('setting', 'Camera'))==0:
+       if (now.tm_hour%rootjson.setting_read_json('setting', 'Camera'))==0:
            if (setting_state['camera']==False)|(setting_state['camera']=='none'):
                rootcam.capture()
                rootcam.create_gif()
@@ -171,6 +173,8 @@ try:
            time.sleep(0.1)
 
            roote_gpiosys()
+
+           now = time.localtime()
 
 except KeyboardInterrupt:
        print("Main thread shutdown")
