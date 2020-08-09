@@ -125,11 +125,12 @@ t.start()
 
 def roote_daycheck():
     split_buf=rootjson.setting_read_json('setting', 'start')
-    if time.strftime('%Y-%m-%d')!=split_buf.split(' ')[0]:
-        if time.strftime('%Y-%m-%d %H:%M:%S', now)==split_buf.split(' ')[1]:
-           buf=rootjson.setting_read_json("setting","day")+1
-           rootjson.setting_write_json("setting","day",buf)
-           setting_state['water_refill']=False
+    if split_buf!='none':
+        if time.strftime('%Y-%m-%d', now)!=split_buf.split(' ')[0]:
+            if time.strftime('%H:%M:%S', now)==split_buf.split(' ')[1]:
+               buf=rootjson.setting_read_json("setting","day")+1
+               rootjson.setting_write_json("setting","day",buf)
+               setting_state['water_refill']=False
 
 def roote_gpiosys():
     if setting_state['setting']==True:
