@@ -4,10 +4,14 @@
 		"network": "none"
 	},
 	"setting": {
-		"start": 1,
+		"start": "none",
+		"day": 1,
 		"plant": "Tomato",
 		"Bright": 1,
+		"Ledon": 1,
+		"Ledoff": 1,
 		"Water": 1,
+		"Env": 1,
 		"Camera": 1
 	}
 }

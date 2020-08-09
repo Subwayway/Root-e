@@ -11,7 +11,10 @@
   ],
   "Custom Plant":[
     "Bright",
+    "Ledoff",
+    "Ledon",
     "Water",
+    "Env",
     "Camera"
   ],
   "Setting":[
@@ -20,18 +23,27 @@
     "Camera"
   ],
   "Lettuce":{
-    "Bright":3,
-    "Water":3,
+    "Bright":0.3,
+    "Ledoff":20,
+    "Ledon":6,
+    "Water":14,
+    "Env":10,
     "Camera":2
   },
   "Tomato":{
-    "Bright":3,
-    "Water":3,
+    "Bright":0.5,
+    "Ledoff":18,
+    "Ledon":6,
+    "Water":14,
+    "Env":30,
     "Camera":2
   },
   "Herb":{
-    "Bright":3,
-    "Water":3,
+    "Bright":0.8,
+    "Ledoff":18,
+    "Ledon":6,
+    "Water":14,
+    "Env":30,
     "Camera":2
   }
 }

@@ -1,38 +1,32 @@
-import RPi.GPIO as GPIO
+from gpiozero import Button, PWMLED, LED
 import time
 
-def gpioset():
-    GPIO.setmode(GPIO.BCM)
-    #led, motor output pin
-    GPIO.setup(19, GPIO.OUT)
-    GPIO.setup(26, GPIO.OUT)
+# back
+button1 = Button(21)
+# next
+button2 = Button(20)
+# select
+button3 = Button(16)
+# cancel
+button4 = Button(12)
 
-    #switch pull up set
-    GPIO.setup(12, GPIO.IN, pull_up_down = GPIO.PUD_UP)
-    GPIO.setup(16, GPIO.IN, pull_up_down = GPIO.PUD_UP)
-    GPIO.setup(20, GPIO.IN, pull_up_down = GPIO.PUD_UP)
-    GPIO.setup(21, GPIO.IN, pull_up_down = GPIO.PUD_UP)
+led = LED(26)
+motor = LED(13)
 
-def motor1(x):
-    if x:
-        GPIO.output(19, GPIO.HIGH)
-    else:
-        GPIO.output(19, GPIO.LOW)
+def led_on():
+    led.on()
 
-def motor2(x):
-    if x:
-        GPIO.output(26, GPIO.HIGH)
-    else:
-        GPIO.output(26, GPIO.LOW)
+def led_off():
+    led.off()
 
-def led(x):
-    if x:
-        GPIO.output(19, GPIO.HIGH)
-    else:
-        GPIO.output(19, GPIO.LOW)
+def motor_on():
+    motor.on()
 
-# def led_pwm(p):
-#     pwm = GPIO.PWM(19, 50)
-#     pwm.start(0)
-#
-#     pwm.ChangeDutyCycle(p)
+def motor_off():
+    motor.off()
+
+def gpio_off():
+    led.off()
+    motor.off()
+    led.close()
+    motor.close()
