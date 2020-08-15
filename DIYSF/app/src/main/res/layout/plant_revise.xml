@@ -1,82 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <Button
-        android:id="@+id/button_first"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="40dp"
-        android:text="@string/next"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <TextView
-        android:id="@+id/TitleUI"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:layout_marginBottom="289dp"
-        android:text="스마트 팜 UI"
-        android:textSize="30dp"
-        app:layout_constraintBottom_toTopOf="@+id/button_first"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.409" />
-
-    <Button
-        android:id="@+id/btnSelect"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="84dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:text="선택"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/dateNow"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right"
-        android:layout_weight="0.3"
-        android:textSize="20dp"
-        app:layout_constraintBottom_toTopOf="@+id/btnSelect"
-        app:layout_constraintEnd_toEndOf="parent"
-        tools:text="@tools:sample/date/mmddyy" />
-
-    <Button
-        android:id="@+id/btnRevise"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="24dp"
-        android:layout_marginRight="24dp"
-        android:layout_marginBottom="41dp"
-        android:text="수정"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <GridLayout
         android:id="@+id/gridLayout"
-        android:layout_width="350dp"
-        android:layout_height="347dp"
+        android:layout_width="340dp"
+        android:layout_height="480dp"
+        android:layout_marginTop="44dp"
+        android:layout_marginBottom="7dp"
         android:columnCount="3"
         android:orientation="vertical"
-        android:rowCount="9"
-        app:layout_constraintBottom_toTopOf="@+id/button_first"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.886">
+        android:rowCount="8">
 
         <TextView
             android:id="@+id/Plant_Name"
@@ -84,7 +20,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:text="이름"
-            android:textSize="25dp" />
+            android:textSize="25dp"/>
 
         <TextView
             android:id="@+id/Plant_bright"
@@ -92,7 +28,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:text="Bright"
-            android:textSize="25dp" />
+            android:textSize="25dp"/>
 
         <TextView
             android:id="@+id/Plant_Camera"
@@ -108,7 +44,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:text="Env"
-            android:textSize="25dp" />
+            android:textSize="25dp"/>
 
         <TextView
             android:id="@+id/Plant_LedOff"
@@ -116,7 +52,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:text="Led Off"
-            android:textSize="25dp" />
+            android:textSize="25dp"/>
 
         <TextView
             android:id="@+id/Plant_LedOn"
@@ -124,7 +60,10 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:text="Led On"
-            android:textSize="25dp" />
+            android:textSize="25dp"
+            app:layout_constraintBaseline_toBaselineOf="@+id/Plant_Name"
+            app:layout_constraintEnd_toEndOf="@+id/Plant_Env"
+            app:layout_constraintStart_toEndOf="@+id/Plant_Env" />
 
         <TextView
             android:id="@+id/Plant_Water"
@@ -140,49 +79,45 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:text="Day"
-            android:textSize="25dp" />
+            android:textSize="25dp"/>
 
-        <TextView
-            android:id="@+id/Plant_Start"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:text="Start"
-            android:textSize="25dp" />
-
-        <TextView
+        <EditText
             android:id="@+id/Name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
+            android:inputType="none"
             android:text=""
-            android:textSize="25dp" />
+            android:textSize="25dp"/>
 
-        <TextView
+        <EditText
             android:id="@+id/Bright"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
+            android:inputType="numberDecimal"
             android:text=""
-            android:textSize="25dp" />
+            android:textSize="25dp"/>
 
-        <TextView
+        <EditText
             android:id="@+id/Camera"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
+            android:inputType="number"
             android:text=""
             android:textSize="25dp" />
 
-        <TextView
+        <EditText
             android:id="@+id/Env"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
+            android:inputType="number"
             android:text=""
             android:textSize="25dp" />
 
-        <TextView
+        <EditText
             android:id="@+id/LedOn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -190,7 +125,7 @@
             android:text=""
             android:textSize="25dp" />
 
-        <TextView
+        <EditText
             android:id="@+id/LedOff"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -198,34 +133,32 @@
             android:text=""
             android:textSize="25dp" />
 
-        <TextView
+        <EditText
             android:id="@+id/Water"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
+            android:inputType="number"
             android:text=""
             android:textSize="25dp" />
 
-        <TextView
+        <EditText
             android:id="@+id/Day"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
+            android:inputType="number"
             android:text=""
             android:textSize="25dp" />
-
-        <TextView
-            android:id="@+id/Start"
+        <Button
+            android:id="@+id/Revise"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:text=""
-            android:textSize="25dp" />
-
-        <ImageView
-            android:id="@+id/Plant_Gif"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical" />
+            android:layout_marginBottom="17dp"
+            android:text="적용"
+            android:layout_row="7"/>
     </GridLayout>
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+</LinearLayout>
