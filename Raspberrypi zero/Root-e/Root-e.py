@@ -114,7 +114,8 @@ def BT_thread():
                         os.system(sh_join)
                     elif buf_BTmsg[0]=='SD':
                         os.system('sudo shutdown -h now')
-                    # elif buf_BTmsg[0]='CP':
+                    elif buf_BTmsg[0]=='RB':
+                        os.system('sudo reboot')
     except:
         pass
 
@@ -132,37 +133,52 @@ def roote_daycheck():
                rootjson.setting_write_json("setting","day",buf)
                setting_state['water_refill']=False
 
+def roote_gpiosys_led():
+    if (now.tm_hour>=rootjson.setting_read_json('setting', 'Ledon'))&(now.tm_hour<rootjson.setting_read_json('setting', 'Ledoff')):
+        rootgpio.led_on()
+        setting_state['led']=True
+    elif (now.tm_hour>=rootjson.setting_read_json('setting', 'Ledoff'))|(now.tm_hour<rootjson.setting_read_json('setting', 'Ledon')):
+        rootgpio.led_off()
+        setting_state['led']=False
+
+def roote_gpiosys_water():
+    if (rootjson.setting_read_json('setting','day')==rootjson.setting_read_json('setting', 'Water'))&(setting_state['water_refill']!=True):
+        while rootsensor.sensor_read(7)!=720:
+            rootgpio.motor_on()
+        rootgpio.motor_off()
+        setting_state['water_refill']=True
+
+def roote_gpiosys_sensor():
+    if (now.tm_min%rootjson.setting_read_json('setting', 'Env'))==0:
+        if (setting_state['DHT_sensor']==False)|(setting_state['DHT_sensor']=='none'):
+            setting_state['DHT_sensor']=True
+            #upload env data to firebase code
+            i,j=dht_py.dht22_read()
+            rootfire.fire_env_update(i,j,rootjson.setting_read_json("info","id"))
+    else:
+        setting_state['DHT_sensor']=False
+
+def roote_gpiosys_camera():
+    if (((now.tm_min%rootjson.setting_read_json('setting', 'Camera'))==0)&(setting_state['led']==True)):
+        if (setting_state['camera']==False)|(setting_state['camera']=='none'):
+            rootgpio.led_off()
+            rootcam.capture()
+            rootcam.create_gif()
+            rootfire.fire_gif_update('/home/pi/smartfarm/Root-e/img_sample/movie.gif', rootjson.setting_read_json("info","id"))
+            setting_state['camera']=True
+    else:
+        setting_state['camera']=False
+
 def roote_gpiosys():
     if setting_state['setting']==True:
        led_pwm.value=rootjson.setting_read_json('setting', 'Bright')
-       if (now.tm_hour>=rootjson.setting_read_json('setting', 'Ledon'))&(now.tm_hour<rootjson.setting_read_json('setting', 'Ledoff')):
-           rootgpio.led_on()
-       elif (now.tm_hour>=rootjson.setting_read_json('setting', 'Ledoff'))|(now.tm_hour<rootjson.setting_read_json('setting', 'Ledon')):
-           rootgpio.led_off()
+       roote_gpiosys_led()
 
-       if (rootjson.setting_read_json('setting','day')==rootjson.setting_read_json('setting', 'Water'))&(setting_state['water_refill']!=True):
-           while rootsensor.sensor_read(7)!=720:
-               rootgpio.motor_on()
-           rootgpio.motor_off()
-           setting_state['water_refill']=True
+       roote_gpiosys_water()
 
-       if (now.tm_min%rootjson.setting_read_json('setting', 'Env'))==0:
-           if (setting_state['DHT_sensor']==False)|(setting_state['DHT_sensor']=='none'):
-               setting_state['DHT_sensor']=True
-               #upload env data to firebase code
-               i,j=dht_py.dht22_read()
-               rootfire.fire_env_update(i,j,rootjson.setting_read_json("info","id"))
-       else:
-           setting_state['DHT_sensor']=False
+       roote_gpiosys_sensor()
 
-       if (now.tm_hour%rootjson.setting_read_json('setting', 'Camera'))==0:
-           if (setting_state['camera']==False)|(setting_state['camera']=='none'):
-               rootcam.capture()
-               rootcam.create_gif()
-               rootfire.fire_gif_update('/home/pi/smartfarm/Root-e/img_sample/movie.gif', rootjson.setting_read_json("info","id"))
-               setting_state['camera']=True
-       else:
-           setting_state['camera']==False
+       roote_gpiosys_camera()
     roote_daycheck()
 
 led_pwm=PWMLED(19)
