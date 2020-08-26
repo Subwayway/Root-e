@@ -20,7 +20,10 @@
   "Setting":[
     "Bluetooth",
     "Wi-Fi",
-    "Camera"
+    "Camera",
+    "LED",
+    "Water",
+    "Power Off"
   ],
   "Lettuce":{
     "Bright":0.3,

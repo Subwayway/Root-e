@@ -55,11 +55,11 @@ def setting_write_json(i,j,k):
 
 def setting_read_json(i,j):
     return json_setting[i][j]
-    
+
 def setting_ret_json():
     with open('/home/pi/smartfarm/Root-e/json_set/setting.json', 'r') as f:
         json_data = json.load(f)
-    
+
     return json_data
 
 def save_selct_env(i):
@@ -86,6 +86,7 @@ def save_custom_env(i,j,k):
     elif j=="Camera":
         setting_write_json("setting","Camera",k)
 
+# main, select, value, time
 def json_setupdate(i,j,k,t):
     # save start time
     setting_write_json("setting","start",t)

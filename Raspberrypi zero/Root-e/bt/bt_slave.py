@@ -41,8 +41,8 @@ def receiveMsg():
         data = client_sock.recv(1024)
         if len(data) != 0:
             print("received [%s]" % data)
-            print("send [%s]" % data[::-1])
-            client_sock.send(data[::-1])
+            # print("send [%s]" % data[::-1])
+            # client_sock.send(data[::-1])
             return data
 
     except IOError:
@@ -59,4 +59,6 @@ def receiveMsg():
         print("all done")
         return 'disconnected'
 
+def sendMsg(x):
+    client_sock.send(x)
 # receiveMsg()

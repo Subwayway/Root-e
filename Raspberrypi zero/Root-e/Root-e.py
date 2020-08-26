@@ -70,20 +70,44 @@ def bt_select():
     # select menu->value menu
     if (menu_state['select']!='none')&(menu_state['value']=='none'):
         menu_state['value']=0
+        screen_change()
     # value menu->change json, BT, wifi set
     elif menu_state['value']!='none':
         # json update
         menu_state_str['main'],menu_state_str['select'],menu_state_str['value']=rootjson.menu_json(menu_state['main'],menu_state['select'],menu_state['value'])
-        rootjson.json_setupdate(menu_state_str['main'],menu_state_str['select'],menu_state_str['value'],time.strftime('%Y-%m-%d %H:%M:%S', now))
-        rootfire.fire_set_update(rootjson.setting_ret_json(), rootjson.setting_read_json("info","id"))
+        screen_change()
+        if(menu_state_str['main']!='Setting'):
+            rootjson.json_setupdate(menu_state_str['main'],menu_state_str['select'],menu_state_str['value'],time.strftime('%Y-%m-%d %H:%M:%S', now))
+            rootfire.fire_set_update(rootjson.setting_ret_json(), rootjson.setting_read_json("info","id"))
+        else:
+            if(menu_state_str['select']=='LED'):
+                rootgpio.led_on()
+                time.sleep(5)
+                rootgpio.led_off()
+                time.sleep(5)
+                rootgpio.led_on()
+                time.sleep(5)
+                rootgpio.led_off()
+                time.sleep(5)
+            elif(menu_state_str['select']=='Water'):
+                rootgpio.motor_on()
+                time.sleep(2)
+                rootgpio.motor_off()
+                time.sleep(2)
+                rootgpio.motor_on()
+                time.sleep(2)
+                rootgpio.motor_off()
+                time.sleep(2)
+            elif(menu_state_str['select']=='Power Off'):
+                os.system('sudo shutdown -h now')
         bt_cancel()
     # main menu->select menu
     else:
         menu_state['select']=0
-
-    screen_change()
+        screen_change()
 
 def bt_cancel():
+    menu_state['main']=0
     menu_state['select']='none'
     menu_state['value']='none'
 
@@ -112,6 +136,7 @@ def BT_thread():
                     if buf_BTmsg[0]=='WF':
                         sh_join='/home/pi/smartfarm/Root-e/wifi/auto_wifi.sh '+buf_BTmsg[1]+' '+buf_BTmsg[2]
                         os.system(sh_join)
+                        bt_slave.sendMsg("id "+rootjson.setting_read_json("info","id"))
                     elif buf_BTmsg[0]=='SD':
                         os.system('sudo shutdown -h now')
                     elif buf_BTmsg[0]=='RB':
@@ -159,13 +184,15 @@ def roote_gpiosys_sensor():
         setting_state['DHT_sensor']=False
 
 def roote_gpiosys_camera():
-    if (((now.tm_min%rootjson.setting_read_json('setting', 'Camera'))==0)&(setting_state['led']==True)):
+    if (((now.tm_hour%rootjson.setting_read_json('setting', 'Camera'))==0)&(setting_state['led']==True)):
         if (setting_state['camera']==False)|(setting_state['camera']=='none'):
             rootgpio.led_off()
+            rootgpio.spotlight_on()
             rootcam.capture()
             rootcam.create_gif()
             rootfire.fire_gif_update('/home/pi/smartfarm/Root-e/img_sample/movie.gif', rootjson.setting_read_json("info","id"))
             setting_state['camera']=True
+            rootgpio.spotlight_off()
     else:
         setting_state['camera']=False
 
@@ -189,7 +216,8 @@ try:
        while True:
            time.sleep(0.1)
 
-           roote_gpiosys()
+           if((menu_state_str['main']!='Setting')&(menu_state_str['select']=='none')):
+               roote_gpiosys()
 
            now = time.localtime()
 
