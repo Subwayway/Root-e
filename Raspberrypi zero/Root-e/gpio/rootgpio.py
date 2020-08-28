@@ -11,6 +11,7 @@ button3 = Button(16)
 button4 = Button(12)
 
 led = LED(26)
+spotlight = LED(7)
 motor = LED(13)
 
 def led_on():
@@ -18,6 +19,12 @@ def led_on():
 
 def led_off():
     led.off()
+
+def spotlight_on():
+    spotlight.on()
+
+def spotlight_off():
+    spotlight.off()
 
 def motor_on():
     motor.on()
