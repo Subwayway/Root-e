@@ -8,8 +8,12 @@ import os
 
 # x=gif path, y=user id
 def fire_gif_update(x,y):
+    f = open("/home/pi/smartfarm/Root-e/firebase/key.txt", 'r')
+    key = f.readline()
+    f.close()
+
     config={
-        "apiKey": "AIzaSyB4MzpCEMtKEOnIJnM9n8yht_Yz2uRzpls", #webkey
+        "apiKey": key, #webkey
         "authDomain": "diy-smartfarm.firebaseapp.com", #프로젝트ID
         "databaseURL": "https://diy-smartfarm.firebaseio.com/", #database url
         "storageBucket": "diy-smartfarm.appspot.com" #storage
@@ -42,8 +46,12 @@ def fire_gif_update(x,y):
     print("Gif upload OK")
 
 def fire_set_update(x,y):
+    f = open("/home/pi/smartfarm/Root-e/firebase/key.txt", 'r')
+    key = f.readline()
+    f.close()
+
     config={
-        "apiKey": "AIzaSyB4MzpCEMtKEOnIJnM9n8yht_Yz2uRzpls", #webkey
+        "apiKey": key, #webkey
         "authDomain": "diy-smartfarm.firebaseapp.com", #프로젝트ID
         "databaseURL": "https://diy-smartfarm.firebaseio.com/", #database url
         "storageBucket": "diy-smartfarm.appspot.com" #storage
@@ -60,8 +68,12 @@ def fire_set_update(x,y):
 
 #x=Temperature y=Humidity z=id
 def fire_env_update(x,y,z):
+    f = open("/home/pi/smartfarm/Root-e/firebase/key.txt", 'r')
+    key = f.readline()
+    f.close()
+
     config={
-        "apiKey": "AIzaSyB4MzpCEMtKEOnIJnM9n8yht_Yz2uRzpls", #webkey
+        "apiKey": key, #webkey
         "authDomain": "diy-smartfarm.firebaseapp.com", #프로젝트ID
         "databaseURL": "https://diy-smartfarm.firebaseio.com/", #database url
         "storageBucket": "diy-smartfarm.appspot.com" #storage
