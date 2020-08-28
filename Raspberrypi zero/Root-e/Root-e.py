@@ -18,7 +18,7 @@ import threading
 menu_state={'main':'none', 'select':'none', 'value':'none'}
 menu_state_str={'main':'none', 'select':'none', 'value':'none'}
 connect_state={'Bluetooth':'none','WiFi':'none'}
-setting_state={'setting':'none', 'led':'none', 'water_refill':'none', 'DHT_sensor':'none', 'camera':'none'}
+setting_state={'setting':'none', 'led':'none', 'water_refill':'none', 'DHT_sensor':'none', 'camera':'none', 'daycheck':'none'}
 
 #first init main logo display
 rootlcd.lcd_init()
@@ -136,7 +136,7 @@ def BT_thread():
                     if buf_BTmsg[0]=='WF':
                         sh_join='/home/pi/smartfarm/Root-e/wifi/auto_wifi.sh '+buf_BTmsg[1]+' '+buf_BTmsg[2]
                         os.system(sh_join)
-                        bt_slave.sendMsg("id "+rootjson.setting_read_json("info","id"))
+                        bt_slave.sendMsg("id"+str(rootjson.setting_read_json("info","id")))
                     elif buf_BTmsg[0]=='SD':
                         os.system('sudo shutdown -h now')
                     elif buf_BTmsg[0]=='RB':
@@ -154,9 +154,13 @@ def roote_daycheck():
     if split_buf!='none':
         if time.strftime('%Y-%m-%d', now)!=split_buf.split(' ')[0]:
             if time.strftime('%H:%M:%S', now)==split_buf.split(' ')[1]:
-               buf=rootjson.setting_read_json("setting","day")+1
-               rootjson.setting_write_json("setting","day",buf)
-               setting_state['water_refill']=False
+                if setting_state['daycheck']!=True:
+                   buf=rootjson.setting_read_json("setting","day")+1
+                   rootjson.setting_write_json("setting","day",buf)
+                   setting_state['water_refill']=False
+                   setting_state['daycheck']=True
+            else:
+                setting_state['daycheck']=False
 
 def roote_gpiosys_led():
     if (now.tm_hour>=rootjson.setting_read_json('setting', 'Ledon'))&(now.tm_hour<rootjson.setting_read_json('setting', 'Ledoff')):
