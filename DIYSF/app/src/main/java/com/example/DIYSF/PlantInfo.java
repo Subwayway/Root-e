@@ -1,6 +1,5 @@
 package com.example.DIYSF;
 
-
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -56,12 +55,13 @@ public class PlantInfo {
     }
 
     public void writePlant(String bright, String camera, String env, String led_off,
-                           String led_on, String water, String day, String plant, String start, int number)
+                           String led_on, String water, String day, String plant, String start, int number, String key)
     {
+
         PlantInfo info = new PlantInfo(bright, camera, env, led_off, led_on, water, day, plant, start);
         info.toMap();
         DBReference = FirebaseDatabase.getInstance().getReference().child("setting")
-                .child("id 1").child("setting" + number);
+                .child(key).child("setting" + number);
         DBReference.setValue(info).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {

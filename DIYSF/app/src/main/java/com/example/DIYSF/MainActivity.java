@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,6 +25,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+
+import com.bumptech.glide.Glide;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -34,8 +38,10 @@ public class MainActivity extends AppCompatActivity {
 
     private static final int MY_PERMISSION_STORAGE = 1111;       // 스토리지 허가 번호
 
-    private Button btnSelect;
-    private Button btnRevise;
+    Button btnSelect;
+    Button btnRevise;
+    Button btnGraph;
+
     TextView name;
     TextView bright;
     TextView camera;
@@ -45,7 +51,8 @@ public class MainActivity extends AppCompatActivity {
     TextView water;
     TextView day;
     TextView start;
-    int num;
+    ImageView gif;
+    int num;               // 식물의
 
     public static Context mActivity;
 
@@ -54,8 +61,6 @@ public class MainActivity extends AppCompatActivity {
     SimpleDateFormat sdfNow  = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
     String formatDate = sdfNow.format(date);
     TextView dateNow;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -76,32 +81,61 @@ public class MainActivity extends AppCompatActivity {
         dateNow = findViewById(R.id.dateNow);             // 시간 출력
         dateNow.setText(formatDate);
 
-        btnSelect = findViewById(R.id.btnSelect);
-
+        btnSelect = findViewById(R.id.btnSelect);         // 선택창 띄움 (PlantListActivity.class 로 화면전환)
         btnSelect.setOnClickListener(new Button.OnClickListener(){
             @Override
             public void onClick(View view)
             {
-                Intent plantintent = new Intent(getApplicationContext(), PlantListActivity.class);
-                startActivity(plantintent);
+                SharedPreferences Key_prefs = getSharedPreferences("Key_prefs",MODE_PRIVATE);
+                String ke = Key_prefs.getString("KEY_ID", "");
+
+                if(!ke.equals(""))
+                {
+                    String key = ke.substring(0,2) + " " + ke.substring(2);
+                    Intent plantintent = new Intent(getApplicationContext(), PlantListActivity.class);
+                    plantintent.putExtra("key", key);
+                    startActivity(plantintent);
+                }
+                else
+                {
+                    Toast.makeText(getApplicationContext(),"제품 key를 먼저 받으세요",Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
-        btnRevise = findViewById(R.id.btnRevise);
-
+        btnRevise = findViewById(R.id.btnRevise);          // 수정창 띄움 (PlantRevise.class 로 화면전환)
         btnRevise.setOnClickListener(new Button.OnClickListener(){
             @Override
             public void onClick(View view)
             {
-                if (name.getText().equals(""))
+                SharedPreferences Key_prefs = getSharedPreferences("Key_prefs",MODE_PRIVATE);
+                String ke = Key_prefs.getString("KEY_ID", "");
+                if (name.getText().equals(""))             // 식물을 먼저 선택해야 수정가능
                 {
                     Toast.makeText(MainActivity.this,"식물을 먼저 선택해 주세요",Toast.LENGTH_SHORT).show();
                 }
                 else
                 {
-                    Log.d("test", "number : " + num);
+                    String key = ke.substring(0,2) + " " + ke.substring(2);
                     Intent pintent = new Intent(getApplicationContext(), PlantRevise.class);
+                    pintent.putExtra("key", key);
                     startActivity(pintent);
+                }
+            }
+        });
+
+        btnGraph = findViewById(R.id.btnGraph);
+        btnGraph.setOnClickListener(new Button.OnClickListener(){
+            @Override
+            public void onClick(View view)
+            {
+                SharedPreferences Key_prefs = getSharedPreferences("Key_prefs",MODE_PRIVATE);
+                String ke = Key_prefs.getString("KEY_ID", "");
+                if(!ke.equals(""))
+                {
+                    String key = ke.substring(0,2) + " " + ke.substring(2);
+                    Intent graphintent = new Intent(getApplicationContext(), GraphActivity.class);
+                    startActivity(graphintent);
                 }
             }
         });
@@ -115,9 +149,10 @@ public class MainActivity extends AppCompatActivity {
         day = findViewById(R.id.Day);
         start = findViewById(R.id.Start);
 
+        gif = findViewById(R.id.Plant_Gif);
     }
 
-    public void SetText(ArrayList<String> arrayList, int number)
+    public void SetText(ArrayList<String> arrayList, int number)       // 화면에 식물 데이터를 띄움
     {
         name.setText(arrayList.get(7));
         bright.setText(arrayList.get(0));
@@ -131,6 +166,14 @@ public class MainActivity extends AppCompatActivity {
         num = number;
     }
 
+    public void SetGif(ArrayList<String> gifList)
+    {
+        String imageUrl = gifList.get(gifList.size()-1);
+        Glide.with(this)
+                .load(imageUrl)
+                .asGif()
+                .into(gif);
+    }
     private void CheckPermission()                             // 저장소 권한 허가 설정을 위한 메소드
     {
         if(ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)

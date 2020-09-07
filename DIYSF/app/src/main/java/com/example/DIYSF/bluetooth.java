@@ -7,6 +7,7 @@ import android.bluetooth.BluetoothSocket;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
+import android.os.SystemClock;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -292,13 +293,19 @@ public class bluetooth extends Activity {
             Log.i(TAG, "BEGIN mConnectedThread");
             byte[] buffer = new byte[1024];
             int bytes;
-
             // Keep listening to the InputStream while connected
             while (true) {
                 try {
                     // InputStream으로부터 값을 받는 읽는 부분(값을 받는다)
-                    bytes = mmInStream.read(buffer);
-
+                    bytes = mmInStream.available();
+                    if (bytes != 0)
+                    {
+                        SystemClock.sleep(100);
+                        bytes = mmInStream.available();
+                        bytes = mmInStream.read(buffer, 0, bytes);
+                        mHandler.obtainMessage(SettingActivity.MESSAGE_READ, bytes, -1, buffer)
+                                .sendToTarget();
+                    }
                 } catch (IOException e) {
                     Log.e(TAG, "disconnected", e);
                     connectionLost();

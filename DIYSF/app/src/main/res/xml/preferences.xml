@@ -7,19 +7,50 @@
         android:key="OnOff" >
     </Preference>
 
-
     <Preference
-        android:title="전송"
-        android:key="BtnSend">
+        android:defaultValue="true"
+        android:title="목록"
+        android:key="list" >
     </Preference>
 
     <EditTextPreference
-        android:title="PassWord 입력"
-        android:summary=""
+        android:title="WIFI 이름 입력"
+        android:defaultValue="0000"
+        android:key="ID"
+        android:maxLines="2"
+        android:selectAllOnFocus="true"
+        android:singleLine="true" />
+
+    <EditTextPreference
+        android:title="WIFI PassWord 입력"
         android:defaultValue="0000"
         android:key="Password"
         android:maxLines="2"
         android:selectAllOnFocus="true"
         android:singleLine="true" />
 
+    <Preference
+        android:title="WIFI 연결"
+        android:key="BtnSend">
+    </Preference>
+
+    <Preference
+        android:title="종료"
+        android:key="BtnExit">
+    </Preference>
+
+    <Preference
+        android:title="재부팅"
+        android:key="BtnRestart">
+    </Preference>
+
+    <Preference
+        android:title="DIY ID :"
+        android:key="Key">
+    </Preference>
+
+    <Preference
+        android:key="delete"
+        android:title="데이터 삭제">
+    </Preference>
 </PreferenceScreen>

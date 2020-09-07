@@ -1,14 +1,12 @@
 package com.example.DIYSF;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-
-import java.util.HashMap;
 
 public class PlantRevise extends Activity
 {
@@ -29,6 +27,7 @@ public class PlantRevise extends Activity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.plant_revise);
+
         R_name = findViewById(R.id.Name);
         R_bright = findViewById(R.id.Bright);
         R_camera = findViewById(R.id.Camera);
@@ -51,6 +50,9 @@ public class PlantRevise extends Activity
         revise.setOnClickListener(new Button.OnClickListener(){
             @Override
             public void onClick(View v) {
+                final Intent pintent = getIntent();
+                String key = pintent.getStringExtra("key");
+
                 ((MainActivity)MainActivity.mActivity).name.setText(R_name.getText());
                 ((MainActivity)MainActivity.mActivity).bright.setText(R_bright.getText());
                 ((MainActivity)MainActivity.mActivity).camera.setText(R_camera.getText());
@@ -73,7 +75,7 @@ public class PlantRevise extends Activity
                 String start = ((MainActivity)MainActivity.mActivity).start.getText().toString();
                 PlantInfo info = new PlantInfo();
                 info.writePlant(new_bright, new_camera, new_env, new_led_off,
-                        new_led_on, new_water, new_day, new_name, start, number);
+                        new_led_on, new_water, new_day, new_name, start, number, key);
             }
         });
     }
