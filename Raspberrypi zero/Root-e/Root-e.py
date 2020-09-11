@@ -166,9 +166,11 @@ def roote_gpiosys_led():
     if (now.tm_hour>=rootjson.setting_read_json('setting', 'Ledon'))&(now.tm_hour<rootjson.setting_read_json('setting', 'Ledoff')):
         rootgpio.led_on()
         setting_state['led']=True
+        led_pwm.value=rootjson.setting_read_json('setting', 'Bright')
     elif (now.tm_hour>=rootjson.setting_read_json('setting', 'Ledoff'))|(now.tm_hour<rootjson.setting_read_json('setting', 'Ledon')):
         rootgpio.led_off()
         setting_state['led']=False
+        led_pwm.value=0
 
 def roote_gpiosys_water():
     if (rootjson.setting_read_json('setting','day')==rootjson.setting_read_json('setting', 'Water'))&(setting_state['water_refill']!=True):
@@ -191,6 +193,7 @@ def roote_gpiosys_camera():
     if (((now.tm_hour%rootjson.setting_read_json('setting', 'Camera'))==0)&(setting_state['led']==True)):
         if (setting_state['camera']==False)|(setting_state['camera']=='none'):
             rootgpio.led_off()
+            led_pwm.value=0
             rootgpio.spotlight_on()
             rootcam.capture()
             rootcam.create_gif()
@@ -202,7 +205,7 @@ def roote_gpiosys_camera():
 
 def roote_gpiosys():
     if setting_state['setting']==True:
-       led_pwm.value=rootjson.setting_read_json('setting', 'Bright')
+       #led_pwm.value=rootjson.setting_read_json('setting', 'Bright')
        roote_gpiosys_led()
 
        roote_gpiosys_water()
@@ -213,7 +216,7 @@ def roote_gpiosys():
     roote_daycheck()
 
 led_pwm=PWMLED(19)
-
+rootfire.stream_on(1)
 
 # main
 try:
