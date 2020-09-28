@@ -2,8 +2,6 @@ package com.example.DIYSF;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;

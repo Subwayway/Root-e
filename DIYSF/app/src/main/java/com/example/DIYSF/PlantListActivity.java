@@ -27,7 +27,6 @@ public class PlantListActivity extends Activity {
     ArrayAdapter<String> adapter;
     ListView plantList;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -39,8 +38,6 @@ public class PlantListActivity extends Activity {
 
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, new ArrayList<String>());   // Listview에 연결시킬 adapter 선언
         plantList.setAdapter(adapter);  // adapter와 listview를 연결
-
-
 
         setUser(ref, key);   // 식물 목록 띄우는 메소드
 

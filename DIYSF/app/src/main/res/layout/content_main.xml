@@ -7,6 +7,7 @@
     tools:layout_editor_absoluteX="-2dp"
     tools:layout_editor_absoluteY="-14dp">
 
+
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="0dp"
@@ -14,30 +15,32 @@
         android:background="#FFFFFF"
         android:contentDescription="@string/app_name"
         android:scaleType="fitXY"
-        android:src="@drawable/background2"
+        android:src="@drawable/background"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+
     <GridLayout
         android:id="@+id/gridLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="161dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginRight="20dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginRight="12dp"
+        android:layout_marginBottom="22dp"
         android:background="@drawable/edge"
         android:columnCount="2"
         android:horizontalSpacing="1dp"
         android:orientation="vertical"
         android:rowCount="9"
         android:verticalSpacing="1dp"
+        app:layout_constraintBottom_toTopOf="@+id/btnSave"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/dateNow">
 
         <TextView
             android:id="@+id/Plant_Name"
@@ -46,7 +49,7 @@
             android:layout_gravity="center_horizontal"
             android:text="이름"
             android:textSize="20dp"
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/Plant_bright"
@@ -55,7 +58,7 @@
             android:layout_gravity="center_horizontal"
             android:text="Bright"
             android:textSize="20dp"
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/Plant_Camera"
@@ -64,7 +67,7 @@
             android:layout_gravity="center_horizontal"
             android:text="Camera"
             android:textSize="20dp"
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/Plant_Env"
@@ -73,7 +76,7 @@
             android:layout_gravity="center_horizontal"
             android:text="Env"
             android:textSize="20dp"
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/Plant_LedOff"
@@ -82,7 +85,7 @@
             android:layout_gravity="center_horizontal"
             android:text="Led Off"
             android:textSize="20dp"
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/Plant_LedOn"
@@ -91,7 +94,7 @@
             android:layout_gravity="center_horizontal"
             android:text="Led On"
             android:textSize="20dp"
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/Plant_Water"
@@ -100,7 +103,7 @@
             android:layout_gravity="center_horizontal"
             android:text="Water"
             android:textSize="20dp"
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/Plant_Day"
@@ -109,7 +112,7 @@
             android:layout_gravity="center_horizontal"
             android:text="Day"
             android:textSize="20dp"
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/Plant_Start"
@@ -118,7 +121,7 @@
             android:layout_gravity="center_horizontal"
             android:text="Start"
             android:textSize="20dp"
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/Name"
@@ -127,7 +130,7 @@
             android:layout_gravity="center_horizontal"
             android:text=""
             android:textSize="20dp"
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/Bright"
@@ -136,7 +139,7 @@
             android:layout_gravity="center_horizontal"
             android:text=""
             android:textSize="20dp"
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/Camera"
@@ -145,7 +148,7 @@
             android:layout_gravity="center_horizontal"
             android:text=""
             android:textSize="20dp"
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/Env"
@@ -154,7 +157,7 @@
             android:layout_gravity="center_horizontal"
             android:text=""
             android:textSize="20dp"
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/LedOn"
@@ -163,7 +166,7 @@
             android:layout_gravity="center_horizontal"
             android:text=""
             android:textSize="20dp"
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/LedOff"
@@ -172,7 +175,7 @@
             android:layout_gravity="center_horizontal"
             android:text=""
             android:textSize="20dp"
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/Water"
@@ -181,7 +184,7 @@
             android:layout_gravity="center_horizontal"
             android:text=""
             android:textSize="20dp"
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/Day"
@@ -190,7 +193,7 @@
             android:layout_gravity="center_horizontal"
             android:text=""
             android:textSize="20dp"
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/Start"
@@ -199,96 +202,119 @@
             android:layout_gravity="center_horizontal"
             android:text=""
             android:textSize="20dp"
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
 
     </GridLayout>
-
-    <Button
-        android:id="@+id/btnSelect"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="14dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:background="@drawable/buttonstyle"
-        android:text="선택"
-        android:textStyle="bold"
-        android:textSize="20sp"
-        android:textColor="#FFFFFF"
-        app:layout_constraintEnd_toStartOf="@+id/btnRevise"
-        app:layout_constraintTop_toBottomOf="@+id/gridLayout" />
-
-    <Button
-        android:id="@+id/btnRevise"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="5dp"
-        android:layout_marginRight="5dp"
-        android:background="@drawable/buttonstyle"
-        android:text="수정"
-        android:textStyle="bold"
-        android:textColor="#FFFFFF"
-        android:textSize="20sp"
-        app:layout_constraintBaseline_toBaselineOf="@+id/btnSelect"
-        app:layout_constraintEnd_toEndOf="@+id/gridLayout" />
-
-    <Button
-        android:id="@+id/btnGraph"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="14dp"
-        android:background="@drawable/buttonstyle"
-        android:text="그래프"
-        android:textStyle="bold"
-        android:textSize="20sp"
-        android:textColor="#FFFFFF"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/gridLayout" />
-
-
-    <ImageView
-        android:id="@+id/imageView2"
-        android:layout_width="157dp"
-        android:layout_height="0dp"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="9dp"
-        android:contentDescription="@string/app_name"
-        android:src="@drawable/logo"
-        app:layout_constraintBottom_toTopOf="@+id/gridLayout"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/dateNow" />
 
     <TextView
         android:id="@+id/dateNow"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="right"
-
-        android:layout_marginTop="71dp"
-        android:layout_marginEnd="82dp"
-        android:layout_marginRight="82dp"
+        android:layout_marginTop="69dp"
+        android:layout_marginEnd="38dp"
+        android:layout_marginRight="38dp"
+        android:layout_marginBottom="49dp"
         android:layout_weight="0.3"
         android:textSize="20dp"
+        app:layout_constraintBottom_toTopOf="@+id/gridLayout"
         app:layout_constraintEnd_toEndOf="@+id/imageView2"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="@tools:sample/date/mmddyy" />
 
     <ImageView
-        android:id="@+id/Plant_Gif"
-        android:layout_width="269dp"
-        android:layout_height="213dp"
-        android:layout_gravity="center"
-        android:layout_marginStart="57dp"
-        android:layout_marginLeft="57dp"
-        android:layout_marginEnd="57dp"
-        android:layout_marginRight="57dp"
-        android:layout_marginBottom="48dp"
-        android:gravity="center"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView"
+        android:id="@+id/imageView2"
+        android:layout_width="157dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="177dp"
+        android:contentDescription="@string/app_name"
+        android:src="@drawable/logo"
+        app:layout_constraintBottom_toTopOf="@+id/btnGraph"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/btnGraph"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="18dp"
+        android:layout_marginRight="18dp"
+        android:background="@drawable/buttonstyle"
+        android:text="그래프"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/Plant_Gif"
+        app:layout_constraintEnd_toStartOf="@+id/btnSave"
+        app:layout_constraintStart_toEndOf="@+id/btnRevise"
+        app:layout_constraintTop_toBottomOf="@+id/imageView2" />
+
+    <Button
+        android:id="@+id/btnSave"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="15dp"
+        android:layout_marginRight="15dp"
+        android:background="@drawable/buttonstyle"
+        android:text="저 장"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/Plant_Gif"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/btnGraph"
+        app:layout_constraintTop_toBottomOf="@+id/gridLayout" />
+
+    <Button
+        android:id="@+id/btnSelect"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginEnd="17dp"
+        android:layout_marginRight="17dp"
+        android:background="@drawable/buttonstyle"
+        android:text="선 택"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/Plant_Gif"
+        app:layout_constraintEnd_toStartOf="@+id/btnRevise"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/btnRevise"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="29dp"
+        android:layout_marginRight="29dp"
+        android:background="@drawable/buttonstyle"
+        android:text="수 정"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/Plant_Gif"
+        app:layout_constraintEnd_toStartOf="@+id/btnGraph"
+        app:layout_constraintStart_toEndOf="@+id/btnSelect" />
+
+    <ImageView
+        android:id="@+id/Plant_Gif"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_gravity="center"
+        android:layout_marginStart="70dp"
+        android:layout_marginLeft="70dp"
+        android:layout_marginEnd="70dp"
+        android:layout_marginRight="70dp"
+        android:layout_marginBottom="1dp"
+        android:gravity="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnSave" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

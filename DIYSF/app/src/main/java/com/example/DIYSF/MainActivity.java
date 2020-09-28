@@ -7,7 +7,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.Menu;
@@ -27,7 +29,20 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.URL;
+import java.net.URLConnection;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -38,9 +53,13 @@ public class MainActivity extends AppCompatActivity {
 
     private static final int MY_PERMISSION_STORAGE = 1111;       // 스토리지 허가 번호
 
+    private File file, dir;
+    private String FileName = null;
+
     Button btnSelect;
     Button btnRevise;
     Button btnGraph;
+    Button btnSave;
 
     TextView name;
     TextView bright;
@@ -88,7 +107,6 @@ public class MainActivity extends AppCompatActivity {
             {
                 SharedPreferences Key_prefs = getSharedPreferences("Key_prefs",MODE_PRIVATE);
                 String ke = Key_prefs.getString("KEY_ID", "");
-
                 if(!ke.equals(""))
                 {
                     String key = ke.substring(0,2) + " " + ke.substring(2);
@@ -114,12 +132,16 @@ public class MainActivity extends AppCompatActivity {
                 {
                     Toast.makeText(MainActivity.this,"식물을 먼저 선택해 주세요",Toast.LENGTH_SHORT).show();
                 }
-                else
+                else if(!ke.equals(""))
                 {
                     String key = ke.substring(0,2) + " " + ke.substring(2);
                     Intent pintent = new Intent(getApplicationContext(), PlantRevise.class);
                     pintent.putExtra("key", key);
                     startActivity(pintent);
+                }
+                else
+                {
+                    Toast.makeText(getApplicationContext(),"제품 key를 먼저 받으세요",Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -134,11 +156,63 @@ public class MainActivity extends AppCompatActivity {
                 if(!ke.equals(""))
                 {
                     String key = ke.substring(0,2) + " " + ke.substring(2);
-                    Intent graphintent = new Intent(getApplicationContext(), GraphActivity.class);
-                    startActivity(graphintent);
+                    Intent gintent = new Intent(getApplicationContext(), GraphActivity.class);
+                    gintent.putExtra("key", key);
+                    startActivity(gintent);
+                }
+                else
+                {
+                    Toast.makeText(getApplicationContext(),"제품 key를 먼저 받으세요",Toast.LENGTH_SHORT).show();
                 }
             }
         });
+
+        btnSave = findViewById(R.id.btnSave);
+        btnSave.setOnClickListener(new Button.OnClickListener() {
+            @Override
+            public void onClick(View view)
+            {
+                DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+                SharedPreferences Key_prefs = getSharedPreferences("Key_prefs",MODE_PRIVATE);
+                String ke = Key_prefs.getString("KEY_ID", "");
+                if(!ke.equals(""))
+                {
+                    String key = ke.substring(0,2) + " " + ke.substring(2);
+                    showGif(ref, new FirebaseCallback() {
+                        @Override
+                        public void onSuccess(DataSnapshot dataSnapshot) {
+                            ArrayList<String> gifList = new ArrayList<>();
+                            if(dataSnapshot.exists()) {
+                                for (DataSnapshot messageData : dataSnapshot.getChildren()) {
+                                    String value = messageData.getValue().toString();
+                                    gifList.add(value);
+                                }
+                               saveGif(gifList);
+                            }
+                            else
+                            {
+                                Toast.makeText(getApplicationContext(),"저장된 사진이 없습니다.",Toast.LENGTH_LONG).show();
+                            }
+                        }
+
+                        @Override
+                        public void onStart() {
+
+                        }
+
+                        @Override
+                        public void onFailure() {
+
+                        }
+                    }, key);
+                }
+                else
+                {
+                    Toast.makeText(getApplicationContext(),"제품 key를 먼저 받으세요",Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
         name = findViewById(R.id.Name);
         bright = findViewById(R.id.Bright);
         camera = findViewById(R.id.Camera);
@@ -174,6 +248,125 @@ public class MainActivity extends AppCompatActivity {
                 .asGif()
                 .into(gif);
     }
+
+    public void saveGif(ArrayList<String> gifList)
+    {
+        String imageUrl = gifList.get(gifList.size()-1);
+
+        FileName = imageUrl.substring(87,102)+ ".gif";
+        String path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).toString();
+        dir = new File(path);
+        dir.mkdirs();
+        if (!dir.exists()) {
+            dir.mkdirs(); // make dir
+            Toast.makeText(getApplicationContext(), "파일 생성", Toast.LENGTH_SHORT).show();
+        }
+
+        DownloadPhotoFromURL downloadPhotoFromURL = new DownloadPhotoFromURL();
+
+        if(new File(dir.getPath() + File.separator + FileName).exists() == false)
+        {
+            downloadPhotoFromURL.execute(imageUrl,FileName);
+        }
+        else
+            {
+            Toast.makeText(getApplicationContext(), "파일이 이미 존재합니다", Toast.LENGTH_SHORT).show();
+
+        }
+    }
+
+    class DownloadPhotoFromURL extends AsyncTask<String, Integer, String> {
+        int count;
+        int lenghtOfFile = 0;
+        InputStream input = null;
+        OutputStream output = null;
+        String tempFileName;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            //progressBar.setProgress(0);
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            tempFileName = params[1];
+            file = new File(dir, params[1]); // 다운로드할 파일명
+            try {
+                URL url = new URL(params[0]);
+                URLConnection connection = url.openConnection();
+                connection.connect();
+
+                lenghtOfFile = connection.getContentLength(); // 파일 크기를 가져옴
+
+                if (file.exists()) {
+                    file.delete();
+                    Log.d(TAG, "file deleted...");
+                }
+
+                input = new BufferedInputStream(url.openStream());
+                output = new FileOutputStream(file);
+                byte data[] = new byte[1024];
+                long total = 0;
+
+                while ((count = input.read(data)) != -1) {
+                    if (isCancelled()) {
+                        input.close();
+                        return String.valueOf(-1);
+                    }
+                    total = total + count;
+                    if (lenghtOfFile > 0) { // 파일 총 크기가 0 보다 크면
+                        publishProgress((int) (total * 100 / lenghtOfFile));
+                    }
+                    output.write(data, 0, count); // 파일에 데이터를 기록
+                }
+
+                output.flush();
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                if (input != null) {
+                    try {
+                        input.close();
+                    }
+                    catch(IOException ioex) {
+                    }
+                }
+                if (output != null) {
+                    try {
+                        output.close();
+                    }
+                    catch(IOException ioex) {
+                    }
+                }
+            }
+            return null;
+        }
+
+        protected void onProgressUpdate(Integer... progress) {
+            super.onProgressUpdate(progress);
+            // 백그라운드 작업의 진행상태를 표시하기 위해서 호출하는 메소드
+            //progressBar.setProgress(progress[0]);
+            //textView.setText("다운로드 : " + progress[0] + "%");
+        }
+
+        protected void onPostExecute(String result) {
+            // pdLoading.dismiss();
+            if (result == null) {
+                Toast.makeText(getApplicationContext(), "다운로드 완료되었습니다.", Toast.LENGTH_LONG).show();
+
+                File file = new File(dir + "/" + tempFileName);
+                //이미지 스캔해서 갤러리 업데이트
+                sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(file)));
+
+            } else {
+                Toast.makeText(getApplicationContext(), "다운로드 에러", Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
+
     private void CheckPermission()                             // 저장소 권한 허가 설정을 위한 메소드
     {
         if(ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
@@ -225,6 +418,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
         super.onActivityResult(requestCode, resultCode, data);
+
     }
 
 
@@ -256,5 +450,26 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void showGif(DatabaseReference ref, final FirebaseCallback listener, String key)
+    {
+        ref.child("gif").child(key).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                listener.onSuccess(dataSnapshot);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private interface FirebaseCallback{
+        void onSuccess(DataSnapshot dataSnapshot);
+        void onStart();
+        void onFailure();
     }
 }
