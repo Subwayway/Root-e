@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
     TextView day;
     TextView start;
     ImageView gif;
-    int num;               // 식물의
+    int num;
 
     public static Context mActivity;
 
@@ -90,24 +90,24 @@ public class MainActivity extends AppCompatActivity {
         Log.e(TAG, "onCreate");
         startActivity(intent);
 
-        CheckPermission();                                // 저장소 사용 메소드
+        CheckPermission();                                // 저장소 사용 허가 메소드
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         mActivity = this;
 
-        dateNow = findViewById(R.id.dateNow);             // 시간 출력
+        dateNow = findViewById(R.id.dateNow);             // 텍스트뷰에 시간 출력
         dateNow.setText(formatDate);
 
-        btnSelect = findViewById(R.id.btnSelect);         // 선택창 띄움 (PlantListActivity.class 로 화면전환)
+        btnSelect = findViewById(R.id.btnSelect);         // 선택창을 띄우는 이벤트 (PlantListActivity.class 로 화면전환)
         btnSelect.setOnClickListener(new Button.OnClickListener(){
             @Override
             public void onClick(View view)
             {
                 SharedPreferences Key_prefs = getSharedPreferences("Key_prefs",MODE_PRIVATE);
                 String ke = Key_prefs.getString("KEY_ID", "");
-                if(!ke.equals(""))
+                if(!ke.equals(""))                        // id 키를 먼저 받아와야 실행
                 {
                     String key = ke.substring(0,2) + " " + ke.substring(2);
                     Intent plantintent = new Intent(getApplicationContext(), PlantListActivity.class);
@@ -121,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        btnRevise = findViewById(R.id.btnRevise);          // 수정창 띄움 (PlantRevise.class 로 화면전환)
+        btnRevise = findViewById(R.id.btnRevise);          // 수정창을 띄우는 이벤트 (PlantRevise.class 로 화면전환)
         btnRevise.setOnClickListener(new Button.OnClickListener(){
             @Override
             public void onClick(View view)
@@ -132,7 +132,7 @@ public class MainActivity extends AppCompatActivity {
                 {
                     Toast.makeText(MainActivity.this,"식물을 먼저 선택해 주세요",Toast.LENGTH_SHORT).show();
                 }
-                else if(!ke.equals(""))
+                else if(!ke.equals(""))                    // id 키를 먼저 받아와야 실행
                 {
                     String key = ke.substring(0,2) + " " + ke.substring(2);
                     Intent pintent = new Intent(getApplicationContext(), PlantRevise.class);
@@ -146,14 +146,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        btnGraph = findViewById(R.id.btnGraph);
+        btnGraph = findViewById(R.id.btnGraph);             // 그래프창을 띄우는 이벤트 (GraphActivity.class 로 화면전환)
         btnGraph.setOnClickListener(new Button.OnClickListener(){
             @Override
             public void onClick(View view)
             {
                 SharedPreferences Key_prefs = getSharedPreferences("Key_prefs",MODE_PRIVATE);
                 String ke = Key_prefs.getString("KEY_ID", "");
-                if(!ke.equals(""))
+                if(!ke.equals(""))                         // id 키를 먼저 받아와야 실행
                 {
                     String key = ke.substring(0,2) + " " + ke.substring(2);
                     Intent gintent = new Intent(getApplicationContext(), GraphActivity.class);
@@ -168,21 +168,21 @@ public class MainActivity extends AppCompatActivity {
         });
 
         btnSave = findViewById(R.id.btnSave);
-        btnSave.setOnClickListener(new Button.OnClickListener() {
+        btnSave.setOnClickListener(new Button.OnClickListener() {       // 이미지뷰에 있는 gif 사진을 저장하는 이벤트, URL을 통해 다운로드
             @Override
             public void onClick(View view)
             {
                 DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
                 SharedPreferences Key_prefs = getSharedPreferences("Key_prefs",MODE_PRIVATE);
                 String ke = Key_prefs.getString("KEY_ID", "");
-                if(!ke.equals(""))
+                if(!ke.equals(""))                         // id 키를 먼저 받아와야 실행
                 {
                     String key = ke.substring(0,2) + " " + ke.substring(2);
                     showGif(ref, new FirebaseCallback() {
                         @Override
                         public void onSuccess(DataSnapshot dataSnapshot) {
                             ArrayList<String> gifList = new ArrayList<>();
-                            if(dataSnapshot.exists()) {
+                            if(dataSnapshot.exists()) {             // DB에 존재하는 모든 gif URL을 리스트에 저장
                                 for (DataSnapshot messageData : dataSnapshot.getChildren()) {
                                     String value = messageData.getValue().toString();
                                     gifList.add(value);
@@ -226,7 +226,7 @@ public class MainActivity extends AppCompatActivity {
         gif = findViewById(R.id.Plant_Gif);
     }
 
-    public void SetText(ArrayList<String> arrayList, int number)       // 화면에 식물 데이터를 띄움
+    public void SetText(ArrayList<String> arrayList, int number)       // 받아온 리스트를 사용해 텍스트뷰에 식물 데이터를 띄움
     {
         name.setText(arrayList.get(7));
         bright.setText(arrayList.get(0));
@@ -240,31 +240,31 @@ public class MainActivity extends AppCompatActivity {
         num = number;
     }
 
-    public void SetGif(ArrayList<String> gifList)
+    public void SetGif(ArrayList<String> gifList)           // glide 라이브러리를 이용해 이미지뷰에 gif를 띄움
     {
         String imageUrl = gifList.get(gifList.size()-1);
-        Glide.with(this)
-                .load(imageUrl)
-                .asGif()
-                .into(gif);
+        Glide.with(this)             // 현재 액티비티에
+                .load(imageUrl)             // Url을 사용하여
+                .asGif()                    // gif 형태로
+                .into(gif);                 // 이미지뷰에 띄움
     }
 
-    public void saveGif(ArrayList<String> gifList)
+    public void saveGif(ArrayList<String> gifList)          // 저장할 파일이름과 위치를 지정하는 메소드
     {
-        String imageUrl = gifList.get(gifList.size()-1);
+        String imageUrl = gifList.get(gifList.size()-1);    // 리스트에 있는 Url 중 가장 최근것을 사용
 
         FileName = imageUrl.substring(87,102)+ ".gif";
-        String path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).toString();
+        String path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).toString(); // 핸드폰 저장소중 DCIM 파일을 저장 위치로 지정
         dir = new File(path);
         dir.mkdirs();
-        if (!dir.exists()) {
-            dir.mkdirs(); // make dir
+        if (!dir.exists()) {    // 파일이 없으면 생성
+            dir.mkdirs();
             Toast.makeText(getApplicationContext(), "파일 생성", Toast.LENGTH_SHORT).show();
         }
 
         DownloadPhotoFromURL downloadPhotoFromURL = new DownloadPhotoFromURL();
 
-        if(new File(dir.getPath() + File.separator + FileName).exists() == false)
+        if(new File(dir.getPath() + File.separator + FileName).exists() == false)   // 지정한 위치에 사진이 없으면 클래스 실행, 있으면 스킾
         {
             downloadPhotoFromURL.execute(imageUrl,FileName);
         }
@@ -275,7 +275,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    class DownloadPhotoFromURL extends AsyncTask<String, Integer, String> {
+    class DownloadPhotoFromURL extends AsyncTask<String, Integer, String> {                   // Url을 통해 사진을 저장하는 클래스
         int count;
         int lenghtOfFile = 0;
         InputStream input = null;
@@ -299,12 +299,12 @@ public class MainActivity extends AppCompatActivity {
 
                 lenghtOfFile = connection.getContentLength(); // 파일 크기를 가져옴
 
-                if (file.exists()) {
+                if (file.exists()) {                          // 파일이 존재할경우 지우고 다시 생성하지만 현재 사용 X
                     file.delete();
                     Log.d(TAG, "file deleted...");
                 }
 
-                input = new BufferedInputStream(url.openStream());
+                input = new BufferedInputStream(url.openStream());  // 스트림을 통해 url을 열어 파일을 받음
                 output = new FileOutputStream(file);
                 byte data[] = new byte[1024];
                 long total = 0;
@@ -452,7 +452,7 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void showGif(DatabaseReference ref, final FirebaseCallback listener, String key)
+    private void showGif(DatabaseReference ref, final FirebaseCallback listener, String key)   // DB에서 읽어올 데이터의 위치를 정하고 datasnapshot에서 읽어오는 메서드(gif URL)}
     {
         ref.child("gif").child(key).addValueEventListener(new ValueEventListener() {
             @Override
@@ -467,7 +467,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private interface FirebaseCallback{
+    private interface FirebaseCallback{    // onDatachange()의 비동기적 특성을 해결하기위한 콜백 매커니즘 인터페이스
         void onSuccess(DataSnapshot dataSnapshot);
         void onStart();
         void onFailure();

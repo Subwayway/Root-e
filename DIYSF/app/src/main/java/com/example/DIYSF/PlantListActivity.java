@@ -34,23 +34,23 @@ public class PlantListActivity extends Activity {
         setContentView(R.layout.plant_list);  // dialog로 설정한 xml과 연결
         final Intent plantintent = getIntent();
         String key = plantintent.getStringExtra("key");
-        plantList = findViewById(R.id.Plant_ListView); // 목록을 띄울 Listview
+        plantList = findViewById(R.id.Plant_ListView); // 식물 목록을 띄울 리스트뷰
 
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, new ArrayList<String>());   // Listview에 연결시킬 adapter 선언
-        plantList.setAdapter(adapter);  // adapter와 listview를 연결
+        plantList.setAdapter(adapter);  // adapter와 리스트뷰를 연결
 
         setUser(ref, key);   // 식물 목록 띄우는 메소드
 
-        plantList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        plantList.setOnItemClickListener(new AdapterView.OnItemClickListener() {        // 리스트뷰에 항목을 클릭했을때 이벤트
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 number = position + 1 ;
-                String key = plantintent.getStringExtra("key");
-                showData(ref, new FirebaseCallback() {
+                String key = plantintent.getStringExtra("key");     // child 위치 지정을 위해 key 변수를 받아오고, number 변수를 지정해줌
+                showData(ref, new FirebaseCallback() {                     // 식물 설정 값을 가져옴
                     @Override
                     public void onSuccess(DataSnapshot dataSnapshot) {
                         ArrayList<String> arrayList = new ArrayList<>();
-                        for(DataSnapshot messageData : dataSnapshot.getChildren())
+                        for(DataSnapshot messageData : dataSnapshot.getChildren())      // DB에 있는 식물 세팅값들을 가져와 리스트에 저장
                         {
                             String value = messageData.getValue().toString();
                             arrayList.add(value);
@@ -69,12 +69,12 @@ public class PlantListActivity extends Activity {
                     }
                 }, number, key);
 
-                showGif(ref, new FirebaseCallback() {
+                showGif(ref, new FirebaseCallback() {                       // 사진 url 을 가져옴
                     @Override
                     public void onSuccess(DataSnapshot dataSnapshot) {
                         ArrayList<String> gifList = new ArrayList<>();
                         if(dataSnapshot.exists()) {
-                            for (DataSnapshot messageData : dataSnapshot.getChildren()) {
+                            for (DataSnapshot messageData : dataSnapshot.getChildren()) {   // DB에 있는 모든 url 을 리스트에 저장
                                 String value = messageData.getValue().toString();
                                 gifList.add(value);
                             }
@@ -111,10 +111,10 @@ public class PlantListActivity extends Activity {
         adapter.clear();
         for(int i=0; i<10; i++)
         {
-            readData(ref, new FirebaseCallback() {
+            readData(ref, new FirebaseCallback() {      // DB에서 식물의 이름을 가져옴
                 @Override
                 public void onSuccess(DataSnapshot dataSnapshot) {
-                    if(dataSnapshot.exists()) {
+                    if(dataSnapshot.exists()) {         // 존재하는 모든 식물 이름값을 어댑터에 넣음
                         String value = dataSnapshot.getValue().toString();
                         Log.d("test", value);
                         adapter.add(value);
@@ -134,7 +134,7 @@ public class PlantListActivity extends Activity {
         }
     }
 
-    private void readData(DatabaseReference ref, final FirebaseCallback listener, int i, String key)
+    private void readData(DatabaseReference ref, final FirebaseCallback listener, int i, String key)    // DB에서 읽어올 데이터의 위치를 정하고 datasnapshot에서 읽어오는 메서드(식물 이름)
     {
         listener.onStart();
 
@@ -151,7 +151,7 @@ public class PlantListActivity extends Activity {
         });
     }
 
-    private void showData(DatabaseReference ref, final FirebaseCallback listener, int number, String key)
+    private void showData(DatabaseReference ref, final FirebaseCallback listener, int number, String key)    // DB에서 읽어올 데이터의 위치를 정하고 datasnapshot에서 읽어오는 메서드(setting child의 값들)
     {
         ref.child("setting").child(key).child("setting" + number).addValueEventListener(new ValueEventListener() {
             @Override
@@ -166,7 +166,7 @@ public class PlantListActivity extends Activity {
         });
     }
 
-    private void showGif(DatabaseReference ref, final FirebaseCallback listener, String key)
+    private void showGif(DatabaseReference ref, final FirebaseCallback listener, String key)    // DB에서 읽어올 데이터의 위치를 정하고 datasnapshot에서 읽어오는 메서드(git URL)
     {
         ref.child("gif").child(key).addValueEventListener(new ValueEventListener() {
             @Override
@@ -181,7 +181,7 @@ public class PlantListActivity extends Activity {
         });
     }
 
-    private interface FirebaseCallback{
+    private interface FirebaseCallback{   // onDatachange()의 비동기적 특성을 해결하기위한 콜백 매커니즘 인터페이스
         void onSuccess(DataSnapshot dataSnapshot);
         void onStart();
         void onFailure();

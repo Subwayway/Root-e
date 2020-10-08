@@ -15,7 +15,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.concurrent.Executors;
 
-public class CalendarActivity extends AppCompatActivity {
+public class CalendarActivity extends AppCompatActivity {           // calendarview 라이브러리를 사용한 달력 액티비티
 
     MaterialCalendarView materialCalendarView;
 
@@ -26,11 +26,11 @@ public class CalendarActivity extends AppCompatActivity {
 
         materialCalendarView = findViewById(R.id.calendarView);
 
-        String[] result = {"2020,03,18","2020,04,18","2020,05,18","2020,06,18"};
+        String[] result = {"2020,03,18","2020,04,18","2020,05,18","2020,06,18"};       //임의로 범위 설정
 
         new ApiSimulator(result).executeOnExecutor(Executors.newSingleThreadExecutor());
 
-        materialCalendarView.setOnDateChangedListener(new OnDateSelectedListener() {
+        materialCalendarView.setOnDateChangedListener(new OnDateSelectedListener() {                 // 날짜를 클릭 했을때의 이벤트
             @Override
             public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
 
@@ -38,16 +38,16 @@ public class CalendarActivity extends AppCompatActivity {
                 int Month = date.getMonth() + 1;
                 int Day = date.getDay();
 
-                String shot_Day = String.format("%d%02d%02d",Year,Month,Day);
-                materialCalendarView.clearSelection();
+                String shot_Day = String.format("%d%02d%02d",Year,Month,Day);    // 원하는 형태로 변형
+                materialCalendarView.clearSelection();                           // 선택값 초기화
 
-                ((GraphActivity)GraphActivity.gcontext).Daily(shot_Day);
+                ((GraphActivity)GraphActivity.gcontext).Daily(shot_Day);         // 그래프 클래스의 메소드로 전달
                 finish();
             }
         });
     }
 
-    private class ApiSimulator extends AsyncTask<Void, Void, List<CalendarDay>> {
+    private class ApiSimulator extends AsyncTask<Void, Void, List<CalendarDay>> {       // 날짜 출력, 표시를 위한 클래스
 
         String[] Time_Result;
 
@@ -76,8 +76,8 @@ public class CalendarActivity extends AppCompatActivity {
                 int month = Integer.parseInt(time[1]);
                 int dayy = Integer.parseInt(time[2]);
 
-                dates.add(day);
-                calendar.set(year,month-1,dayy);
+                dates.add(day);                             // 리스트에 선택한 날짜 추가
+                calendar.set(year,month-1,dayy);     // 달력에 점표시
             }
 
             return dates;

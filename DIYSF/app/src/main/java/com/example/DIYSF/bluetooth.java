@@ -289,7 +289,7 @@ public class bluetooth extends Activity {
             mmOutStream = tmpOut;
         }
 
-        public void run() {
+        public void run() {             // id key 값을 받아오기 위한 용도로만 사용
             Log.i(TAG, "BEGIN mConnectedThread");
             byte[] buffer = new byte[1024];
             int bytes;
@@ -298,7 +298,7 @@ public class bluetooth extends Activity {
                 try {
                     // InputStream으로부터 값을 받는 읽는 부분(값을 받는다)
                     bytes = mmInStream.available();
-                    if (bytes != 0)
+                    if (bytes != 0) // 블루투스로 값을 전송 받은경우 핸들러를 통해 SettingActivity로 읽은 값을 전송
                     {
                         SystemClock.sleep(100);
                         bytes = mmInStream.available();
