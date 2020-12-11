@@ -20,3 +20,10 @@
     - https://github.com/eleparts/RPi_I2C_LCD_driver
 7. WI-FI
     - 쉘스크립트를 통해 와이파이 정보를 저장하게끔 함.
+
+# Result
+1. Root-e
+![KakaoTalk_20200912_162500246](https://user-images.githubusercontent.com/48232366/101913890-f56d8d80-3c06-11eb-9230-f50a59b76150.jpg)
+
+2. Test lettuce GIF
+![식물수정1](https://user-images.githubusercontent.com/48232366/101914079-2e0d6700-3c07-11eb-9b9c-7dbb16eb7abb.gif)
