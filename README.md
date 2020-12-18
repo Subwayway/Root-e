@@ -1,4 +1,6 @@
 # Root-e
+![KakaoTalk_20200902_225920841](https://user-images.githubusercontent.com/48232366/102617573-be562980-417c-11eb-9f57-c13e28605437.png)
+
 ## Rpi Zero W
 1. ADC
     - spi통신을 통해 MCP3208로부터 ADC값을 읽음.
@@ -23,7 +25,16 @@
 
 # Result
 1. Root-e
-![KakaoTalk_20200912_162500246](https://user-images.githubusercontent.com/48232366/101913890-f56d8d80-3c06-11eb-9230-f50a59b76150.jpg)
+    - ![KakaoTalk_20200912_162500246](https://user-images.githubusercontent.com/48232366/101913890-f56d8d80-3c06-11eb-9230-f50a59b76150.jpg)
 
-2. Test lettuce GIF
-![식물수정1](https://user-images.githubusercontent.com/48232366/101914079-2e0d6700-3c07-11eb-9b9c-7dbb16eb7abb.gif)
+2. PCB
+    - ![KakaoTalk_20200912_144844592](https://user-images.githubusercontent.com/48232366/102617401-7931f780-417c-11eb-9e48-f8d353f17a1e.jpg)
+    - ![KakaoTalk_20200912_150141462](https://user-images.githubusercontent.com/48232366/102617404-7a632480-417c-11eb-86a2-cc9c0aa1b068.jpg)
+
+3. APP
+    - ![KakaoTalk_20200914_172419609](https://user-images.githubusercontent.com/48232366/102617945-4a685100-417d-11eb-9b5d-d014942bc401.jpg)
+    - ![KakaoTalk_20200912_155906167_02](https://user-images.githubusercontent.com/48232366/102617949-4b997e00-417d-11eb-8bcf-b6fca208295e.jpg)
+    - ![KakaoTalk_20200912_155906167_01](https://user-images.githubusercontent.com/48232366/102617952-4c321480-417d-11eb-9bd2-e01a1d4b84df.jpg)
+
+4. Test lettuce GIF
+    - ![식물수정1](https://user-images.githubusercontent.com/48232366/101914079-2e0d6700-3c07-11eb-9b9c-7dbb16eb7abb.gif)
